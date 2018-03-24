@@ -1,0 +1,49 @@
+# This uses newer and faster docker based build system
+sudo: false
+
+language: php
+
+notifications:
+  on_success: never
+  on_failure: change
+
+php:
+  - nightly
+  - 7.0
+  - 5.6
+  - 5.5
+  - 5.4
+
+env:
+  - WP_PROJECT_TYPE=plugin WP_VERSION=latest WP_MULTISITE=0 WP_TEST_URL=http://localhost:12000 WP_TEST_USER=test WP_TEST_USER_PASS=test
+
+matrix:
+  allow_failures:
+    - php: nightly
+
+addons:
+  artifacts:
+    s3_bucket: o10n 
+    s3_region: "us-west-1"
+    working_dir: screenshots
+    paths:
+      - $(ls /tmp/*.png | tr "\n" ":")
+
+notifications:
+  email: false
+  slack:
+    rooms:
+      - o10n-x:J4WK8cWmvrEyQGtajZ0XcXC2#testing
+    on_success: always
+    on_failure: always
+
+before_script:
+  - echo 'upload_max_filesize = 10M ' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/upload-size.ini
+  - echo 'post_max_size = 10M ' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/post-size.ini
+  - git clone https://github.com/o10n-x/wordpress-test-template wp-tests
+  - wget https://github.com/o10n-x/wordpress-css-optimization/archive/master.zip 
+  - bash wp-tests/bin/install-wp-tests.sh test root '' localhost $WP_VERSION
+ 
+script:
+  - phpunit
+  - cd tests/spec && bundle exec rspec test.rb
