@@ -96,7 +96,12 @@ class Install extends Controller implements Controller_Interface
             update_option('o10n_core_version', O10N_CORE_VERSION, false);
 
             // upgrade actions
-            // ...
+            if (isset($options['update_count'])) {
+                update_option('o10n_update_count', $options['update_count'], false);
+                
+                unset($options['update_count']);
+                $update_options = true;
+            }
 
             if (!$update_options) {
 

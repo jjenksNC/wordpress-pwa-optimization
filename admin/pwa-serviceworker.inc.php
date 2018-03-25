@@ -309,6 +309,8 @@ submit_button(__('Save'), 'primary large', 'is_submit', false);
     </tr>
 </table>
 
+<p class="suboption info_yellow"><strong><span class="dashicons dashicons-lightbulb"></span></strong> You can enable debug modus by adding <code>define('O10N_DEBUG', true);</code> to wp-config.php. The browser console will show details about the service worker.</p>
+
 <hr />
 <?php
     submit_button(__('Save'), 'primary large', 'is_submit', false);

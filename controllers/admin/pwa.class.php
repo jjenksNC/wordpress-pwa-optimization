@@ -95,7 +95,7 @@ class AdminPwa extends ModuleAdminController implements Module_Admin_Controller_
      */
     final public function settings_link($links)
     {
-        $settings_link = '<a href="'.esc_url(add_query_arg(array('page' => 'o10n-pwa','tab' => 'optimization'), admin_url($this->admin_base))).'">'.__('Settings').'</a>';
+        $settings_link = '<a href="'.esc_url(add_query_arg(array('page' => 'o10n-pwa','tab' => 'serviceworker'), admin_url($this->admin_base))).'">'.__('Settings').'</a>';
         array_unshift($links, $settings_link);
 
         return $links;

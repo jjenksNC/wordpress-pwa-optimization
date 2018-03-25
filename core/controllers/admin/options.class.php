@@ -78,14 +78,13 @@ class AdminOptions extends Controller implements Controller_Interface
             $options = $settings;
         }
 
-        // store update count
-        if (!isset($options['update_count'])) {
-            $options['update_count'] = 0;
-        }
-        $options['update_count']++;
-
         // save
         update_option('o10n', $options, true);
+
+        // store update count
+        $count = get_option('o10n_update_count', 0);
+        $count++;
+        update_option('o10n_update_count', $count, false);
 
         // update cache
         $this->options->update($options);

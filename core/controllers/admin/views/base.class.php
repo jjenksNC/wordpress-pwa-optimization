@@ -20,6 +20,18 @@ class AdminViewBase extends Controller implements AdminView_Controller_Interface
     protected $module_key;
     public $module; // module controller
 
+    // tab menu
+    protected $wpo_tabs = array(
+        'intro' => array(
+            'title' => '<span class="dashicons dashicons-admin-home"></span>',
+            'title_attr' => 'Intro'
+        ),
+        'settings' => array(
+            'title' => 'Settings',
+            'pagekey' => 'settings'
+        )
+    );
+
     /**
      * Load controller
      *
@@ -78,9 +90,7 @@ class AdminViewBase extends Controller implements AdminView_Controller_Interface
     {
 
         // WPO plugin
-        if (defined('O10N_WPO_VERSION')) {
-            return $this->core->modules('wpo')->admin_base();
-        } elseif (!empty($this->module_key)) {
+        if (!empty($this->module_key)) {
             return $this->core->modules($this->module_key)->admin_base();
         } else {
             return 'admin.php';
@@ -96,12 +106,10 @@ class AdminViewBase extends Controller implements AdminView_Controller_Interface
     {
 
         // WPO plugin
-        if (defined('O10N_WPO_VERSION')) {
-            return $this->core->modules('wpo')->admin_tabs();
-        } elseif (!empty($this->module_key)) {
+        if (!empty($this->module_key)) {
             return $this->core->modules($this->module_key)->admin_tabs();
         } else {
-            return array();
+            return $this->wpo_tabs;
         }
     }
 
@@ -120,12 +128,12 @@ class AdminViewBase extends Controller implements AdminView_Controller_Interface
         }
 
         // WPO plugin
-        if (defined('O10N_WPO_VERSION')) {
+        if (empty($this->module_key)) {
 
             // extract tab from page
             $base = 'o10n';
-            $active_tab = ($_GET['page'] === 'o10n') ? 'intro' : substr($_GET['page'], 5);
-            $active_subtab = (isset($_GET['tab']))? $_GET['tab'] : false;
+            $active_tab = (isset($_GET['tab']))? $_GET['tab'] : false;
+            $active_subtab = (isset($_GET['subtab']))? $_GET['subtab'] : false;
         } else {
             $base = 'o10n-' . $this->module_key;
             $active_tab = (isset($_GET['tab']))? $_GET['tab'] : 'intro';

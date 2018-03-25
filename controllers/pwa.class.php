@@ -32,6 +32,7 @@ class Pwa extends Controller implements Controller_Interface
     private $sw_worker_filename = 'o10n-sw-worker.js';
     private $sw_worker_filename_debug = 'o10n-sw-worker.debug.js';
     private $sw_hash_filename = 'o10n-sw-hash.txt';
+    private $sw_hash_filename_debug = 'o10n-sw-hash.debug.txt';
 
     private $sw_path; // root path of service worker
     private $sw_url_path; // root URL path of service worker
@@ -141,7 +142,7 @@ class Pwa extends Controller implements Controller_Interface
         // web app meta
         add_action('wp_head', array($this, 'header'), $this->first_priority);
 
-        //$this->update_sw();
+        $this->update_sw();
     }
 
     /**
@@ -275,6 +276,13 @@ class Pwa extends Controller implements Controller_Interface
                                             if ($condition_key === 'type') {
                                                 $c_value = $this->client->config_index('pwa', 'policy_' . $c_value);
                                             }
+                                            if ($condition_key === 'pattern' && is_array($c_value)) {
+                                                $pattern = array();
+                                                foreach ($c_value as $pattern_key => $pattern_value) {
+                                                    $pattern[$this->client->config_index('pwa', 'policy_'. $pattern_key)] = $pattern_value;
+                                                }
+                                                $c_value = $pattern;
+                                            }
                                             $index_condition[$this->client->config_index('pwa', 'policy_'. $condition_key)] = $c_value;
                                         }
                                         $index_cache[$this->client->config_index('pwa', 'policy_'. $c_key)][$c_index] = $index_condition;
@@ -382,7 +390,8 @@ class Pwa extends Controller implements Controller_Interface
                 $this->sw_path . $this->sw_filename,
                 $this->sw_path . $this->sw_worker_filename,
                 $this->sw_path . $this->sw_filename_debug,
-                $this->sw_path . $this->sw_worker_filename_debug
+                $this->sw_path . $this->sw_worker_filename_debug,
+                $this->sw_path . $this->sw_hash_filename
             );
             foreach ($sw_files as $file) {
                 if (file_exists($file)) {
@@ -430,7 +439,12 @@ class Pwa extends Controller implements Controller_Interface
                 
                 // write service worker file
                 $filename = ($debug) ? $this->sw_filename_debug : $this->sw_filename;
-                $this->file->put_contents($this->sw_path . $filename, $source);
+                try {
+                    $this->file->put_contents($this->sw_path . $filename, $source);
+                } catch (\Exception $e) {
+                    throw new Exception('Failed to store service worker ' . $this->file->safe_path($this->sw_path . $filename) . ' <pre>'.$e->getMessage().'</pre>', 'config');
+                }
+                
 
                 $worker_file = $this->core->modules('pwa')->dir_path() . 'public/js/sw-background-worker' . (($debug) ? '.debug.js' : '.js');
                 if (!file_exists($worker_file)) {
@@ -441,10 +455,20 @@ class Pwa extends Controller implements Controller_Interface
                 $source .= str_replace('O10N_CONFIG', $config, file_get_contents($worker_file)) . "\n";
 
                 // write service worker background worker file
-                $this->file->put_contents($this->sw_path . $this->sw_worker_filename, $source);
+                $filename = ($debug) ? $this->sw_worker_filename_debug : $this->sw_worker_filename;
+                try {
+                    $this->file->put_contents($this->sw_path . $filename, $source);
+                } catch (\Exception $e) {
+                    throw new Exception('Failed to store service worker background worker ' . $this->file->safe_path($this->sw_path . $filename) . ' <pre>'.$e->getMessage().'</pre>', 'config');
+                }
 
                 // write hash file
-                $this->file->put_contents($this->sw_path . $this->sw_hash_filename, $file_hash);
+                $filename = ($debug) ? $this->sw_hash_filename_debug : $this->sw_hash_filename;
+                try {
+                    $this->file->put_contents($this->sw_path . $filename, $file_hash);
+                } catch (\Exception $e) {
+                    throw new Exception('Failed to store service worker hash file ' . $this->file->safe_path($this->sw_path . $filename) . ' <pre>'.$e->getMessage().'</pre>', 'config');
+                }
 
                 // save hash to database
                 update_option('o10n_pwa_sw_hash' . (($debug) ? '_debug' : ''), array($file_hash, time()), true);
