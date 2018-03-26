@@ -195,10 +195,11 @@ class AdminClient extends Controller implements Controller_Interface
 
         // global admin script
         wp_enqueue_script('o10n_global', O10N_CORE_URI . 'admin/js/global.js', array( 'jquery' ), O10N_CORE_VERSION);
-        wp_add_inline_script('o10n_global', 'O10N['.$this->index('init').']('.json_encode($this->config_data).');');
 
         // admin plugin page?
         if (!isset($_GET['page']) || strpos($_GET['page'], 'o10n') !== 0) {
+            wp_add_inline_script('o10n_global', 'O10N['.$this->index('init').']('.json_encode($this->config_data).');');
+
             return;
         }
 
@@ -244,6 +245,8 @@ class AdminClient extends Controller implements Controller_Interface
 
         // general admin CSS
         wp_enqueue_style('o10n_cp', O10N_CORE_URI . 'admin/css/cp.css', false, O10N_CORE_VERSION);
+
+        wp_add_inline_script('o10n_global', 'O10N['.$this->index('init').']('.json_encode($this->config_data).');');
     }
 
     /**
