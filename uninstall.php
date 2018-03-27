@@ -20,13 +20,13 @@ if (!class_exists('\O10n\Uninstall')) {
 }
 
 // start uninstaller
-$uninstaller = new Uninstall('http2');
+$uninstaller = new Uninstall('pwa');
 
 // delete options
-// o10n_pwa_sw_hash
+delete_option('o10n_pwa_sw_hash');
 
 // delete settings
-$uninstaller->delete_settings('http2');
+$uninstaller->delete_settings('pwa');
 
 // delete cache tables
 $uninstaller->delete_tables();
