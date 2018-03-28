@@ -25,6 +25,18 @@
             },
             "additionalProperties": false
         },
+        "ignore_errors": {
+            "title": "Ignore CSS parser errors",
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "title": "Ignore CssMin.php errors",
+                    "type": "boolean",
+                    "default": false
+                }
+            },
+            "additionalProperties": false
+        },
         "import": {
             "title": "Process @import links",
             "type": "object",
