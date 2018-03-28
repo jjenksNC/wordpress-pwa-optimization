@@ -86,30 +86,31 @@ class Env extends Controller implements Controller_Interface
      */
     final public function is_optimization($reset = false)
     {
+        if (defined('O10N_DISABLED') && O10N_DISABLED) {
+            return false;
+        }
+
+        // disabled by filter
+        $disabled = apply_filters('o10n_disabled', false);
+        if ($disabled === true) {
+            return $this->optimization_enabled = false;
+        }
+
         // return cached result
-        if ($reset || !is_null($this->optimization_enabled)) {
+        if (!$reset && !is_null($this->optimization_enabled)) {
             return $this->optimization_enabled;
         }
 
         // verify constants
         if (
-            // disabled
-            (defined('O10N_DISABLED') && O10N_DISABLED)
-
             // disable for ajax / post requests
-            || defined('DOING_AJAX')
+            defined('DOING_AJAX')
             || defined('WP_ADMIN')
             || defined('XMLRPC_REQUEST')
             || defined('DOING_CRON')
             || defined('APP_REQUEST')
             || (defined('SHORTINIT') && SHORTINIT)
         ) {
-            return $this->optimization_enabled = false;
-        }
-
-        // disabled by filter
-        $disabled = apply_filters('o10n_disabled', false);
-        if ($disabled === true) {
             return $this->optimization_enabled = false;
         }
 

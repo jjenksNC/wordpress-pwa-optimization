@@ -62,6 +62,9 @@ class Pwa extends Controller implements Controller_Interface
      */
     protected function setup()
     {
+        if (!$this->env->is_optimization()) {
+            return;
+        }
 
         // add module definitions
         $this->client->add_module_definitions($this->client_modules, $this->client_module_dependencies);
@@ -141,8 +144,6 @@ class Pwa extends Controller implements Controller_Interface
 
         // web app meta
         add_action('wp_head', array($this, 'header'), $this->first_priority);
-
-        $this->update_sw();
     }
 
     /**
@@ -150,6 +151,10 @@ class Pwa extends Controller implements Controller_Interface
      */
     final public function header()
     {
+        if (!$this->env->is_optimization()) {
+            return;
+        }
+        
         $meta = $this->options->get('pwa.meta');
         if ($meta) {
             print $meta;
