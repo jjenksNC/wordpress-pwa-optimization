@@ -90,15 +90,15 @@ class Env extends Controller implements Controller_Interface
             return false;
         }
 
+        // return cached result
+        if (!$reset && !is_null($this->optimization_enabled)) {
+            return $this->optimization_enabled;
+        }
+        
         // disabled by filter
         $disabled = apply_filters('o10n_disabled', false);
         if ($disabled === true) {
             return $this->optimization_enabled = false;
-        }
-
-        // return cached result
-        if (!$reset && !is_null($this->optimization_enabled)) {
-            return $this->optimization_enabled;
         }
 
         // verify constants
