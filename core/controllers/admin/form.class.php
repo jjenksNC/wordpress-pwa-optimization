@@ -584,14 +584,19 @@ class AdminForm extends Controller implements Controller_Interface
                         if (isset($option['suboption']['title'])) {
                             print '<p class="d">'.$option['suboption']['title'].'</p>';
                         }
+                        
+                        $value = $this->options->get($option['suboption']['json_key']);
+                        if (is_null($value) || !isset($value)) {
+                            $value = (isset($option['suboption']['default'])) ? $option['suboption']['default'] : '';
+                        }
 
                         // number input
-                        print '<input type="number" data-suboption="' . $option['json_key'] . '" ' .
+                        print '<input type="number" name="o10n['.$option['suboption']['json_key'].']" data-suboption="' . $option['json_key'] . '" ' .
                             ((isset($option['suboption']['size'])) ? ' size="'.esc_html($option['suboption']['size']).'"' : '') .
                             ((isset($option['suboption']['minimum'])) ? ' min="'.esc_html($option['suboption']['minimum']).'"' : '')  .
                             ((isset($option['suboption']['maximum'])) ? ' max="'.esc_html($option['suboption']['maximum']).'"' : '') .
                             ((isset($option['suboption']['placeholder'])) ? ' placeholder="'.esc_html($option['suboption']['placeholder']).'"' : '') .
-                            ' value="' . (string)$option['suboption']['value'] . '"' . ' />';
+                            ' value="' . (string)$value . '"' . ' />';
 
                     break;
 

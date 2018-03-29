@@ -10,8 +10,21 @@
             "type": "boolean",
             "default": false
         },
+        "minifier": {
+            "title": "Minifier to use for minification",
+            "type": "string",
+            "enum": [
+                "cssmin",
+                "yui",
+                "regex"
+            ],
+            "default": "cssmin"
+        },
         "cssmin": {
             "$ref": "css-cssmin.json#"
+        },
+        "yui": {
+            "$ref": "css-yui.json#"
         },
         "rebase": {
             "title": "Rebase relative URIs in CSS",
