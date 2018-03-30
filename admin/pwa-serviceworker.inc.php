@@ -301,6 +301,21 @@ submit_button(__('Save'), 'primary large', 'is_submit', false);
         </td>
     </tr>
     <tr valign="top" data-ns="pwa"<?php $visible('pwa');  ?>>
+        <th scope="row">Background Fetch</th>
+        <td>
+            <p class="description">A performance flaw of Service Workers is that they initiate Fetch requests that cannot be cancelled when a user wants to navigate which can slow and even block navigation.</p>
+            <p class="description">This plugin provides a unique innovation in which Fetch requests can be performed in a regular Web Worker that can be terminated when a user wants to navigate, instantly cancelling any Fetch requests or background tasks.</p>
+            <p class="description">Some Fetch requests should not be aborted, for example CSS and javascript resources that are required for each page. The policy below enables to define specifically what resources should be fetched in the background worker.</p>
+
+            <div class="suboption" id="pwa-background-fetch-policy"><div class="loading-json-editor"><?php print __('Loading JSON editor...', 'optimization'); ?></div></div>
+            <input type="hidden" class="json" name="o10n[pwa.background-fetch.policy]" data-json-type="json-array" data-json-editor-height="auto" data-json-editor-init="1" value="<?php $value('pwa.background-fetch.policy'); ?>" />
+            <p class="description">Enter a policy configuration for resources that should be Fetched in the background worker.</p>
+
+            <p class="suboption"><label><input type="checkbox" name="o10n[pwa.cache.preload_on_install]" value="1"<?php $checked('pwa.cache.preload_on_install'); ?> /> Force background Fetch</label></p>
+            <p class="description">Web Workers have a start-up latency of ~100ms. By default, Fetch requests are only handled by the background worker when the Web Worker is ready and before then Fetch requests are handled by the Service Worker. This option enables to wait for the Web Worker to be available before Fetch requests are processed. You can configure this option for individual asset (groups) in the policy configuration.</p>
+        </td>
+    </tr>
+    <tr valign="top" data-ns="pwa"<?php $visible('pwa');  ?>>
         <th scope="row">CSS online/offline class</th>
         <td>
             <label><input type="checkbox" name="o10n[pwa.offline_class]" value="1"<?php $checked('pwa.offline_class'); ?> /> Enabled</label>

@@ -107,6 +107,17 @@
                                 "type": "boolean",
                                 "default": true
                             },
+                            "minify": {
+                                "title": "Minify script",
+                                "type": "boolean",
+                                "default": true
+                            },
+                            "minifier": {
+                                "$ref": "js-minify.json#/definitions/minifiers"
+                            },
+                            "fallback_minifier": {
+                                "$ref": "js-minify.json#/definitions/fallback_minifier"
+                            },
                             "rel_preload": {
                                 "title": "Load script using rel=preload",
                                 "type": "boolean",

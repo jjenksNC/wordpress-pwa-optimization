@@ -10,6 +10,22 @@
             "type": "boolean",
             "default": false
         },
+        "minifier": {
+            "$ref": "js-minify.json#/definitions/minifiers"
+        },
+        "closure-compiler-service": {
+            "title": "Closure Compiler Service config",
+            "type": "object",
+            "properties": {
+                "options": {
+                    "$ref": "js-closure-compiler.json#"
+                }
+            },
+            "additionalProperties": false
+        },
+        "fallback": {
+            "$ref": "js-minify.json#/definitions/fallback_minifier"
+        },
         "comments": {
             "title": "Comment related optimization",
             "type": "object",
@@ -171,6 +187,12 @@
                                         "type": "boolean",
                                         "default": true
                                     },
+                                    "minifier": {
+                                        "$ref": "js-minify.json#/definitions/minifiers"
+                                    },
+                                    "fallback_minifier": {
+                                        "$ref": "js-minify.json#/definitions/fallback_minifier"
+                                    },
                                     "exclude": {
                                         "title": "Exclude from concatenation",
                                         "type": "boolean",
@@ -243,5 +265,39 @@
             "additionalProperties": false
         }
     },
-    "additionalProperties": false
+    "additionalProperties": false,
+
+    "definitions": {
+        "minifiers": {
+            "title": "Minifier to use for minification",
+            "type": "string",
+            "enum": [
+                "jsmin",
+                "jshrink",
+                "closure-compiler-service",
+                "custom"
+            ],
+            "default": "cssmin"
+        },
+        "fallback_minifier": {
+            "title": "Minifier to use for minification",
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "title": "Merge inline scripts",
+                    "type": "boolean",
+                    "default": false
+                },
+                "minifier": {
+                    "$ref": "js-minify.json#/definitions/minifiers"
+                },
+                "timeout": {
+                    "title": "Timeout before fallback is used.",
+                    "type": "number",
+                    "minimum": 1
+                }
+            },
+            "additionalProperties": false
+        }
+    }
 }

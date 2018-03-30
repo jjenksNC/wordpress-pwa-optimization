@@ -329,8 +329,12 @@ class Url extends Controller implements Controller_Interface
             require_once O10N_CORE_PATH . 'lib/Net_URL2.php';
         }
 
-        $base = new Net_URL2($base_href);
-        $abs = (string)$base->resolve($url);
+        try {
+            $base = new Net_URL2($base_href);
+            $abs = (string)$base->resolve($url);
+        } catch (\Exception $err) {
+            throw new Exception('Net_URL2 (rebase): '. $err->getMessage(), 'url');
+        }
 
         return $abs;
     }

@@ -66,6 +66,14 @@
                                 "type": "boolean",
                                 "default": true
                             },
+                            "minify": {
+                                "title": "Minify stylesheet",
+                                "type": "boolean",
+                                "default": true
+                            },
+                            "minifier": {
+                                "$ref": "css-minify.json#/definitions/minifiers"
+                            },
                             "rel_preload": {
                                 "title": "Load stylesheet using rel=preload",
                                 "type": "boolean",

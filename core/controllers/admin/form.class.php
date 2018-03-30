@@ -71,6 +71,7 @@ class AdminForm extends Controller implements Controller_Interface
                     $schemajson = $this->json->parse(file_get_contents($fileinfo->getPathname()));
                 } catch (\Exception $err) {
                     // invalid JSON
+                    die($filename . ' ' . $err->getMessage());
                     continue 1;
                 }
 
@@ -300,6 +301,9 @@ class AdminForm extends Controller implements Controller_Interface
 
             // reference, load sub-schema
             if (isset($result->{'$ref'}) && substr($result->{'$ref'}, 0, 1) !== '/') {
+                if (!isset($this->schemas[explode('#', $result->{'$ref'})[0]])) {
+                    throw new Exception('Schema $ref not found: ' . explode('#', $result->{'$ref'})[0] . ' -- ' . var_export(array_keys($this->schemas), true), 'admin');
+                }
                 $result = $this->schemas[explode('#', $result->{'$ref'})[0]];
             }
 
@@ -360,7 +364,12 @@ class AdminForm extends Controller implements Controller_Interface
                 $option['default_checked'] = false;
             }
             $option['default_value'] = $option['default_checked'];
- 
+
+            if (!isset($option['type'])) {
+                print_r($option);
+                exit;
+            }
+
             // option with sub option
             if ($option['type'] === 'object' && isset($option['properties'])) {
                 $suboption = false;
@@ -527,9 +536,17 @@ class AdminForm extends Controller implements Controller_Interface
                         if (isset($option['suboption']['title'])) {
                             print '<p class="d">'.$option['suboption']['title'].'</p>';
                         }
+                        $value = $this->options->get($option['suboption']['json_key']);
+                        if (is_null($value) || !isset($value)) {
+                            $value = (isset($option['suboption']['default'])) ? $option['suboption']['default'] : '';
+                        }
+
+                        // text input
+                        print '<div id="'.str_replace('.', '-', $option['suboption']['json_key']).'"><div class="loading-json-editor">' . __('Loading JSON editor...', 'optimization') . '</div></div>
+                        <input type="hidden" class="json" name="o10n['.$option['suboption']['json_key'].']" data-json-type="json' . (($option['suboption']['type'] === 'array') ? '-array' : '') . '" ' . ((isset($option['suboption']['placeholder'])) ? ' placeholder="'.esc_attr($option['suboption']['placeholder']).'"' : '') . ' data-suboption="' . $option['json_key'] . '" data-json-editor-init="1" value="' . esc_attr(json_encode($value)) . '"' . ' />';
 
                         // JSON editor
-                        print '<div class="json" data-json-type="json' . (($option['suboption']['type'] === 'array') ? '-array' : '') . '" ' . ((isset($option['suboption']['placeholder'])) ? ' placeholder="'.esc_attr($option['suboption']['placeholder']).'"' : '') . '><div class="loading-json-editor">' . __('Loading JSON editor...', 'o10n') . '</div></div>';
+                        //print '<div class="json" data-json-type="json' . (($option['suboption']['type'] === 'array') ? '-array' : '') . '" ' . ((isset($option['suboption']['placeholder'])) ? ' placeholder="'.esc_attr($option['suboption']['placeholder']).'"' : '') . '><div class="loading-json-editor">' . __('Loading JSON editor...', 'o10n') . '</div></div>';
 
                     break;
 
@@ -550,11 +567,16 @@ class AdminForm extends Controller implements Controller_Interface
                                 // checkbox
                                 print '<label><input type="checkbox" value="' . esc_attr($option['suboption']['enum'][0]) . '" data-suboption="' . $option['json_key'] . '"' . (($this->is_checked($option['json_key'])) ? ' checked' : '') .' /> ' . esc_html($option['suboption']['title']) . '</label>';
                             } else {
-                                print '<select data-suboption="' . $option['json_key'] . '">';
+                                $value = $this->options->get($option['suboption']['json_key']);
+                                if (is_null($value) || !isset($value)) {
+                                    $value = (isset($option['suboption']['default'])) ? $option['suboption']['default'] : '';
+                                }
+
+                                print '<select  name="o10n['.$option['suboption']['json_key'].']" data-suboption="' . $option['json_key'] . '">';
 
                                 // print options
                                 foreach ($option['suboption']['enum'] as $option_key) {
-                                    $selected = ($option_key === $option['suboption']['value']) ? true : false;
+                                    $selected = ($option_key === $value) ? true : false;
                                     print '<option value="'.esc_html($option_key).'"'.(($selected) ? ' selected' : '').'>'.esc_html($option_key).'</option>';
                                 }
 

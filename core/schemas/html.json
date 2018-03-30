@@ -11,22 +11,23 @@
         "minify": {
             "title": "Minify HTML",
             "description": "Compress HTML. This option will reduce the size of HTML but may require full page cache to maintain an optimal server speed.",
-            "oneOf": [{
-                "type": "boolean",
-                "default": false
-            }, {
-                "type": "object",
-                "properties": {
-                    "enabled": {
-                        "type": "boolean",
-                        "default": false
-                    }
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "default": false
                 },
-                "required": [
-                    "enabled"
-                ],
-                "additionalProperties": false
-            }]
+                "minifier": {
+                    "$ref": "html.json#/definitions/minifiers"
+                },
+                "voku-htmlmin": {
+                    "$ref": "html-voku-htmlmin.json#"
+                }
+            },
+            "required": [
+                "enabled"
+            ],
+            "additionalProperties": false
         },
         "remove_comments": {
             "title": "Strip HTML comments",
@@ -112,33 +113,6 @@
             },
             "uniqueItems": true
         },
-        "api": {
-            "title": "HTML optimization API configuration",
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "title": "HTML Optimization API",
-                    "type": "boolean",
-                    "default": false
-                },
-                "endpoint": {
-                    "title": "API endpoint URL",
-                    "description": "The endpoint URL of the HTML optimization API.",
-                    "type": "string",
-                    "format": "uri"
-                },
-                "secret": {
-                    "title": "Authentication secret (JSON Web Token)",
-                    "type": "string"
-                },
-                "fallback": {
-                    "title": "Fallback to basic minifier",
-                    "type": "boolean",
-                    "default": true
-                }
-            },
-            "additionalProperties": false
-        },
         "minimum_bytes": {
             "title": "Minimum bytes of HTML to activate optimization.",
             "type": "number",
@@ -149,5 +123,18 @@
             "$ref": "html-htmlminifier.json#"
         }
     },
-    "additionalProperties": false
+    "additionalProperties": false,
+
+    "definitions": {
+        "minifiers": {
+            "title": "Minifier to use for minification",
+            "type": "string",
+            "enum": [
+                "htmlphp",
+                "voku-htmlmin",
+                "custom"
+            ],
+            "default": "htmlphp"
+        }
+    }
 }

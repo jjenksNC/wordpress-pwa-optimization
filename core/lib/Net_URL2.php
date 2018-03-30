@@ -597,7 +597,7 @@ class Net_URL2
                     break;
                 }
                 // @codeCoverageIgnoreStart
-                throw new Exception(
+                throw new \Exception(
                     'Net_URL2 Internal Error: '. __METHOD__ .'(): ' .
                     'Opening bracket [ must exist at offset 0'
                 );
@@ -610,7 +610,7 @@ class Net_URL2
                 // private method and bracket pairs are checked beforehand.
                 // See as well the first exception for the opening bracket.
                 // @codeCoverageIgnoreStart
-                throw new Exception(
+                throw new \Exception(
                     'Net_URL2 Internal Error: '. __METHOD__ .'(): ' .
                     'Closing bracket ] must exist, not found'
                 );
@@ -902,7 +902,7 @@ class Net_URL2
             $reference = new self($reference);
         }
         if (!$reference->_isFragmentOnly() && !$this->isAbsolute()) {
-            throw new Exception(
+            throw new \Exception(
                 'Base-URL must be absolute if reference is not fragment-only'
             );
         }
@@ -1072,7 +1072,7 @@ class Net_URL2
     {
         if (!isset($_SERVER['REQUEST_METHOD'])) {
             // ALERT - no current URL
-            throw new Exception('Script was not called through a webserver');
+            throw new \Exception('Script was not called through a webserver');
         }
 
         // Begin with a relative URL
@@ -1110,7 +1110,7 @@ class Net_URL2
     {
         if (!isset($_SERVER['REQUEST_METHOD'])) {
             // ALERT - no current URL
-            throw new Exception('Script was not called through a webserver');
+            throw new \Exception('Script was not called through a webserver');
         }
 
         // Begin with a relative URL

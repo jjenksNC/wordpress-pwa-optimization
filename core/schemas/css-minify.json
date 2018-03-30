@@ -11,14 +11,7 @@
             "default": false
         },
         "minifier": {
-            "title": "Minifier to use for minification",
-            "type": "string",
-            "enum": [
-                "cssmin",
-                "yui",
-                "regex"
-            ],
-            "default": "cssmin"
+            "$ref": "css-minify.json#/definitions/minifiers"
         },
         "cssmin": {
             "$ref": "css-cssmin.json#"
@@ -236,6 +229,9 @@
                                         "type": "boolean",
                                         "default": true
                                     },
+                                    "minifier": {
+                                        "$ref": "css-minify.json#/definitions/minifiers"
+                                    },
                                     "exclude": {
                                         "title": "Exclude from concatenation",
                                         "type": "boolean",
@@ -409,5 +405,19 @@
             }]
         }
     },
-    "additionalProperties": false
+    "additionalProperties": false,
+
+    "definitions": {
+        "minifiers": {
+            "title": "Minifier to use for minification",
+            "type": "string",
+            "enum": [
+                "cssmin",
+                "yui",
+                "regex",
+                "custom"
+            ],
+            "default": "cssmin"
+        }
+    }
 }
