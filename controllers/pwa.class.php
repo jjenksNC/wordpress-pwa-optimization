@@ -39,6 +39,8 @@ class Pwa extends Controller implements Controller_Interface
     private $sw_scope; // service worker scope
     private $sw_hash; // service worker source file hash
 
+    private $preload_attachments = array(); // attached assets for smart preloading in service worker
+
     /**
      * Load controller
      *
@@ -62,9 +64,6 @@ class Pwa extends Controller implements Controller_Interface
      */
     protected function setup()
     {
-        if (!$this->env->is_optimization()) {
-            return;
-        }
 
         // add module definitions
         $this->client->add_module_definitions($this->client_modules, $this->client_module_dependencies);
@@ -142,8 +141,16 @@ class Pwa extends Controller implements Controller_Interface
             $this->client->set_config('pwa', 'file_hash', $update_interval);
         }
 
+
+        if (!$this->env->is_optimization()) {
+            return;
+        }
+
         // web app meta
         add_action('wp_head', array($this, 'header'), $this->first_priority);
+
+        // output headers
+        add_action('o10n_headers', array($this, 'send_headers'), PHP_INT_MAX);
     }
 
     /**
@@ -158,6 +165,35 @@ class Pwa extends Controller implements Controller_Interface
         $meta = $this->options->get('pwa.meta');
         if ($meta) {
             print $meta;
+        }
+    }
+
+    /**
+     * Output HTTP headers
+     */
+    final public function send_headers()
+    {
+        if (headers_sent()) {
+            return;
+        }
+
+        // preload attachments for smart preloading in service worker
+        $preload_attachments = apply_filters('o10n_sw_preload_attachments', $this->preload_attachments);
+        if (is_array($preload_attachments) && !empty($preload_attachments)) {
+            $links = array();
+            foreach ($preload_attachments as $url) {
+
+                // sanitize URL
+                if (strpos($url, '<') !== false || strpos($url, '>') !== false) {
+                    $url = str_replace(array('<','>'), array('%3C','%3E'), $url);
+                }
+                
+                $links[] = sprintf(
+                    '<%s>',
+                    $url
+                );
+            }
+            header(sprintf('%s: %s', 'X-O10N-SW-Preload', implode(', ', $links)));
         }
     }
 
@@ -355,6 +391,53 @@ class Pwa extends Controller implements Controller_Interface
         }
         $config[$this->client->config_index('pwa', 'bypass')] = $policy_index;
 
+        // background fetch policy
+        if ($this->options->bool('pwa.background-fetch.enabled')) {
+            $policies = $this->options->get('pwa.background-fetch.policy', array());
+
+            $default_force = $this->options->bool('pwa.background-fetch.force');
+            $default_timeout = $this->options->get('pwa.background-fetch.timeout');
+            $default_startup_timeout = $this->options->get('pwa.background-fetch.startup_timeout');
+
+            $policy_index = array();
+            foreach ($policies as $index => $policy) {
+                $policy_index[$index] = array();
+
+                if (!isset($policy['force'])) {
+                    $policy['force'] = $default_force;
+                }
+                if (!isset($policy['timeout'])) {
+                    $policy['timeout'] = $default_timeout;
+                }
+                if (!isset($policy['startup_timeout'])) {
+                    $policy['startup_timeout'] = $default_startup_timeout;
+                }
+
+                foreach ($policy as $key => $value) {
+                    switch ($key) {
+                        case "match":
+                            $policy_index[$index][$this->client->config_index('pwa', 'policy_'. $key)] = array();
+                            foreach ($value as $c_index => $condition) {
+                                $index_match = array();
+                                foreach ($condition as $condition_key => $c_value) {
+                                    if ($condition_key === 'type') {
+                                        $c_value = $this->client->config_index('pwa', 'policy_' . $c_value);
+                                    }
+                                    $index_match[$this->client->config_index('pwa', 'policy_'. $condition_key)] = $c_value;
+                                }
+                                $policy_index[$index][$this->client->config_index('pwa', 'policy_'. $key)][$c_index] = $index_match;
+                            }
+                        break;
+                        default:
+                            $policy_index[$index][$this->client->config_index('pwa', 'policy_'. $key)] = $value;
+                        break;
+                    }
+                }
+            }
+            
+            $config[$this->client->config_index('pwa', 'backgroundfetch')] = $policy_index;
+        }
+
         // preload assets
         
         // apply filters
@@ -388,7 +471,6 @@ class Pwa extends Controller implements Controller_Interface
      */
     final public function update_sw()
     {
-
         // PWA disabled, remove service worker
         if (!$this->options->bool('pwa.enabled')) {
             $sw_files = array(
@@ -559,5 +641,25 @@ class Pwa extends Controller implements Controller_Interface
         }
 
         return $bypass_policy;
+    }
+
+    /**
+     * Attach assets to preload bundled with the page in the Service Worker
+     */
+    final public function attach_preload($urls)
+    {
+        if (!is_array($urls)) {
+            $urls = array($urls);
+        }
+
+        foreach ($urls as $url) {
+            if (!is_string($url)) {
+                continue 1;
+            }
+            $url = trim($url);
+            if ($url !== '' && !in_array($url, $this->preload_attachments)) {
+                $this->preload_attachments[] = $url;
+            }
+        }
     }
 }

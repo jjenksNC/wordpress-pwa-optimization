@@ -160,8 +160,19 @@ class AdminViewPwa extends AdminViewBase
                         'pwa.cache.preload' => 'json-array',
                         'pwa.cache.preload_on_install' => 'bool',
 
-                        'pwa.offline_class' => 'bool'
+                        'pwa.background-fetch.enabled' => 'bool',
+
+                        'pwa.bypass.enabled' => 'bool'
                     ));
+
+                    if ($forminput->bool('pwa.background-fetch.enabled')) {
+                        $forminput->type_verify(array(
+                            'pwa.background-fetch.policy' => 'json-array',
+                            'pwa.background-fetch.force' => 'bool',
+                            'pwa.background-fetch.timeout' => 'int-empty',
+                            'pwa.background-fetch.startup_timeout' => 'int-empty'
+                        ));
+                    }
 
                     if ($forminput->bool('pwa.importScripts.enabled')) {
                         $forminput->type_verify(array(

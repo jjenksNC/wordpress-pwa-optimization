@@ -21,6 +21,7 @@ list($base_tab, $active_tab, $active_subtab) = $view->active_tab();
 
 ?>
 	<nav class="nav-tab-wrapper">
+        <a href="<?php print esc_url(add_query_arg(array('page' => 'o10n'), admin_url('admin.php'))); ?>" style="padding:0px;margin:0px;float:right;padding-top: 5px;color: #555;font-size: 1.3em; font-weight:bold;text-decoration:none;">WordPress WPO</a>
 <?php
 foreach ($tabs as $tabkey => $tabinfo) {
     $class = '';
@@ -71,7 +72,7 @@ foreach ($tabs as $tabkey => $tabinfo) {
     if (isset($tabinfo['href'])) {
         $url = $tabinfo['href'];
     } else {
-        $url = add_query_arg($params, admin_url($base));
+        $url = add_query_arg($params, admin_url((isset($tabinfo['base'])) ? $tabinfo['base'] : $base));
     }
     if (isset($tabinfo['csstitle'])) {
         $title = '';

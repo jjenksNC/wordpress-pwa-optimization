@@ -12,7 +12,7 @@ namespace O10n;
  * @wordpress-plugin
  * Plugin Name:       PWA Optimization
  * Description:       Advanced Progressive Web App optimization toolkit. Service Worker, HTML fragment streaming, HTTP/2 Cache-Digest calculation, Web App Manifest editor and more.
- * Version:           0.0.6
+ * Version:           0.0.7
  * Author:            Optimization.Team
  * Author URI:        https://optimization.team/
  * Text Domain:       o10n
@@ -29,8 +29,8 @@ if (defined('WP_INSTALLING') && WP_INSTALLING) {
 }
 
 // settings
-$module_version = '0.0.6';
-$minimum_core_version = '0.0.32';
+$module_version = '0.0.7';
+$minimum_core_version = '0.0.39';
 $plugin_path = dirname(__FILE__);
 
 // load the optimization module loader

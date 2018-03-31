@@ -27,10 +27,45 @@ class AdminViewBase extends Controller implements AdminView_Controller_Interface
             'title_attr' => 'Intro'
         ),
         'settings' => array(
-            'title' => 'Settings',
+            'title' => 'JSON Settings',
+            'title_attr' => 'JSON configuration profile editor',
             'pagekey' => 'settings'
         )
     );
+
+    // tab menu
+    protected $wpo_module_tabs = array(
+        'html' => array(
+            'title' => 'HTML',
+            'title_attr' => 'HTML Optimization'
+        ),
+        'css' => array(
+            'title' => 'CSS',
+            'title_attr' => 'CSS Optimization'
+        ),
+        'javascript' => array(
+            'title' => 'Javascript',
+            'title_attr' => 'Javascript Optimization'
+        ),
+        'pwa' => array(
+            'title' => 'PWA / Service Worker',
+            'title_attr' => 'Progressive Web App Optimization'
+        ),
+        'fonts' => array(
+            'title' => 'Fonts',
+            'title_attr' => 'Webfonts Optimization'
+        ),
+        'http2' => array(
+            'title' => 'HTTP/2',
+            'title_attr' => 'HTTP/2 Optimization'
+        ),
+        'security' => array(
+            'title' => 'Security',
+            'title_attr' => 'Security Optimization'
+        )
+    );
+
+    //$modules = array('html','css','javascript','pwa','webfonts','http2','security');
 
     /**
      * Load controller
@@ -61,6 +96,18 @@ class AdminViewBase extends Controller implements AdminView_Controller_Interface
         // view is part of module
         if (!empty($this->module_key)) {
             $this->module = & $this->core->modules($this->module_key);
+        }
+
+        $multiple_installed = (count($this->core->modules()) > 1);
+
+        foreach ($this->wpo_module_tabs as $module => $settings) {
+            if ($this->core->module_loaded($module)) {
+                $settings['base'] = ($multiple_installed) ? 'admin.php' : $this->core->modules($module)->admin_base();
+                $settings['pagekey'] = $module;
+            } else {
+                $settings['href'] = add_query_arg(array('s' => 'o10n', 'tab' => 'search', 'type' => 'author'), admin_url('plugin-install.php'));
+            }
+            $this->wpo_tabs[$module] = $settings;
         }
     }
 

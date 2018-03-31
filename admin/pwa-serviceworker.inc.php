@@ -155,8 +155,8 @@ $asset_policy = '';
                 <p class="description">Use a HTTP HEAD request and <code>etag</code> and/or <code>last-modified</code> header verification to update the cache. This option saves bandwidth while enabling quick updates of changed content, however, it adds an extra request for content that always changes.</p>
             </div>
             <div class="suboption">
-                <label><input type="checkbox" name="o10n[pwa.cache.pages.mousedown]" value="1"<?php $checked('pwa.cache.pages.mousedown'); ?> /> Preload on Mouse Down</label>
-            <p class="description">Start preloading navigation requests in the Service Worker on mouse down. Older mobile devices such as iOS8 have a <a href="https://encrypted.google.com/search?q=300ms+tap+delay+mobile" target="_blank" rel="noopener">300ms click delay</a> which is a lot of time wasted for navigation clicks. An average mouse click also has a 200-500ms delay before navigation starts. This feature enables to make use of the otherwise wasted delay.</p>
+                <label><input type="checkbox" name="o10n[pwa.cache.pages.mousedown]" data-json-ns="1" value="1"<?php $checked('pwa.cache.pages.mousedown'); ?> /> Preload on Mouse Down</label>
+                <p class="description">Start preloading navigation requests in the Service Worker on mouse down. Older mobile devices such as iOS8 have a <a href="https://encrypted.google.com/search?q=300ms+tap+delay+mobile" target="_blank" rel="noopener">300ms click delay</a> which is a lot of time wasted for navigation clicks. An average mouse click also has a 200-500ms delay before navigation starts. This feature enables to make use of the otherwise wasted delay.</p>
             </div>
         </td>
     </tr>
@@ -301,18 +301,90 @@ submit_button(__('Save'), 'primary large', 'is_submit', false);
         </td>
     </tr>
     <tr valign="top" data-ns="pwa"<?php $visible('pwa');  ?>>
+        <th scope="row">Smart Preloading</th>
+        <td>
+                <p class="description">When a page or asset is loaded by the Service Worker you can automatically preload additional assets via the <code>X-O10N-SW-PRELOAD: asset, asset [, ...]</code> header. You can control the header using the method <code>O10n\attach_preload()</code>. A use case would be to preload above the fold images for a page. (<a href="javascript:void(0);" onclick="jQuery('#preload_header_example').fadeToggle();">show example</a>)</p>
+            <div class="info_yellow" id="preload_header_example" style="display:none;"><strong>Example:</strong> <pre class="clickselect" title="<?php print esc_attr('Click to select', 'optimization'); ?>" style="cursor:copy;padding: 10px;margin: 0 1px;margin-top:5px;font-size: 13px;">
+/* Attach assets to page for smart preloading in the Service Worker */
+add_action('init', function() {
+
+    if (function_exists('O10n\attach_preload')) {
+
+        // attach single asset to page
+        O10n\attach_preload('/path/to/image.jpg');
+
+        // attach multiple assets to page
+        O10n\attach_preload(array('/path/to/image.jpg', 'https://cdn.google.com/script.js'));
+
+    }
+
+});
+</pre></div>
+
+        </td>
+    </tr>
+    <tr valign="top" data-ns="pwa"<?php $visible('pwa');  ?>>
         <th scope="row">Background Fetch</th>
         <td>
+            <label><input type="checkbox" name="o10n[pwa.background-fetch.enabled]" data-json-ns="1" value="1"<?php $checked('pwa.background-fetch.enabled'); ?> /> Enabled</label>
             <p class="description">A performance flaw of Service Workers is that they initiate Fetch requests that cannot be cancelled when a user wants to navigate which can slow and even block navigation.</p>
             <p class="description">This plugin provides a unique innovation in which Fetch requests can be performed in a regular Web Worker that can be terminated when a user wants to navigate, instantly cancelling any Fetch requests or background tasks.</p>
-            <p class="description">Some Fetch requests should not be aborted, for example CSS and javascript resources that are required for each page. The policy below enables to define specifically what resources should be fetched in the background worker.</p>
 
-            <div class="suboption" id="pwa-background-fetch-policy"><div class="loading-json-editor"><?php print __('Loading JSON editor...', 'optimization'); ?></div></div>
-            <input type="hidden" class="json" name="o10n[pwa.background-fetch.policy]" data-json-type="json-array" data-json-editor-height="auto" data-json-editor-init="1" value="<?php $value('pwa.background-fetch.policy'); ?>" />
-            <p class="description">Enter a policy configuration for resources that should be Fetched in the background worker.</p>
+            <div data-ns="pwa.background-fetch" <?php $visible('pwa.background-fetch');  ?>>
+                <div class="suboption" id="pwa-background-fetch-policy"><div class="loading-json-editor"><?php print __('Loading JSON editor...', 'optimization'); ?></div></div>
+                <input type="hidden" class="json" name="o10n[pwa.background-fetch.policy]" data-json-type="json-array" data-json-editor-height="auto" data-json-editor-init="1" value="<?php $value('pwa.background-fetch.policy', '[
+  {
+    "title": "Match all",
+    "match": [
+      {
+        "type": "url",
+        "pattern": ".*",
+        "regex": true
+      }
+    ]
+  }
+]'); ?>" />
+                <p class="description">Enter a policy configuration for resources that should be Fetched in the background worker. (<a href="javascript:void(0);" onclick="jQuery('#background_fetch_example').fadeToggle();">show example</a>)</p>
+            <div class="info_yellow" id="background_fetch_example" style="display:none;"><strong>Example:</strong> <pre class="clickselect" title="<?php print esc_attr('Click to select', 'optimization'); ?>" style="cursor:copy;padding: 10px;margin: 0 1px;margin-top:5px;font-size: 13px;">[
+  {
+    "title": "Match images",
+    "match": [
+      {
+        "type": "header",
+        "name": "Accept",
+        "pattern": "image/"
+      },
+      {
+        "exclude": true,
+        "type": "header",
+        "name": "Accept",
+        "pattern": "text/html"
+      },
+      {
+        "exclude": true,
+        "type": "url",
+        "pattern": "important-above-the-fold-image.jpg"
+      }
+    ],
+    "force": true
+  }
+]</pre></div>
 
-            <p class="suboption"><label><input type="checkbox" name="o10n[pwa.cache.preload_on_install]" value="1"<?php $checked('pwa.cache.preload_on_install'); ?> /> Force background Fetch</label></p>
-            <p class="description">Web Workers have a start-up latency of ~100ms. By default, Fetch requests are only handled by the background worker when the Web Worker is ready and before then Fetch requests are handled by the Service Worker. This option enables to wait for the Web Worker to be available before Fetch requests are processed. You can configure this option for individual asset (groups) in the policy configuration.</p>
+                <p class="suboption"><label><input type="checkbox" name="o10n[pwa.background-fetch.force]" value="1"<?php $checked('pwa.background-fetch.force'); ?> /> Force background Fetch</label></p>
+                <p class="description">Web Workers have a start-up latency of ~100ms. By default, Fetch requests are only handled by the background worker when the Web Worker is ready and before then Fetch requests are handled by the Service Worker. This option enables to wait for the Web Worker to be available before Fetch requests are processed. You can configure this option for individual assets in the policy configuration.</p>
+
+                <div class="suboption">
+                    <h5 class="h">&nbsp;Fetch Timeout</h5>
+                    <input type="number" name="o10n[pwa.background-fetch.timeout]" min="1" placeholder="5000" value="<?php $value('pwa.background-fetch.timeout'); ?>" style="width:120px;">
+                    <p class="description">Enter a time in milliseconds to wait for the background worker to resolve. The default is 15000ms.</p>
+                </div>
+
+                <div class="suboption">
+                    <h5 class="h">&nbsp;Startup Timeout</h5>
+                    <input type="number" name="o10n[pwa.background-fetch.startup_timeout]" min="1" placeholder="1000" value="<?php $value('pwa.background-fetch.startup_timeout'); ?>" style="width:120px;">
+                    <p class="description">Enter a time in milliseconds to wait for the Web Worker to be ready. The default is 1000ms.</p>
+                </div>
+            </div>
         </td>
     </tr>
     <tr valign="top" data-ns="pwa"<?php $visible('pwa');  ?>>

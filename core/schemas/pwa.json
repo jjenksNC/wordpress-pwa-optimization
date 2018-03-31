@@ -362,6 +362,96 @@
                 "start_url"
             ],
             "additionalProperties": true
+        },
+        "background-fetch": {
+            "title": "Fetch resources in background worker",
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "title": "Enable background fetch",
+                    "type": "boolean",
+                    "default": false
+                },
+                "policy": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "title": {
+                                "title": "Policy reference",
+                                "type": "string"
+                            },
+                            "match": {
+                                "title": "Match conditions",
+                                "type": "array",
+                                "items": {
+                                    "$ref": "pwa.json#/definitions/matchRequest"
+                                },
+                                "uniqueItems": true
+
+                            },
+                            "force": {
+                                "title": "Wait for background web worker to be ready.",
+                                "type": "boolean",
+                                "default": false
+                            },
+                            "timeout": {
+                                "title": "Time in milliseconds to wait for the service worker to reply.",
+                                "oneOf": [{
+                                    "type": "number",
+                                    "minimum": 0
+                                }, {
+                                    "type": "string",
+                                    "enum": [""]
+                                }],
+                                "default": 1000
+                            },
+                            "startup_timeout": {
+                                "title": "Time in milliseconds to wait for the web worker to be ready.",
+                                "oneOf": [{
+                                    "type": "number",
+                                    "minimum": 0
+                                }, {
+                                    "type": "string",
+                                    "enum": [""]
+                                }],
+                                "default": 1000
+                            }
+                        },
+                        "additionalProperties": false,
+                        "required": ["match"]
+                    },
+                    "uniqueItems": true
+                },
+                "force": {
+                    "title": "Wait for background web worker to be ready.",
+                    "type": "boolean",
+                    "default": false
+                },
+                "timeout": {
+                    "title": "Time in milliseconds to wait for the service worker to reply.",
+                    "oneOf": [{
+                        "type": "number",
+                        "minimum": 0
+                    }, {
+                        "type": "string",
+                        "enum": [""]
+                    }],
+                    "default": 5000
+                },
+                "startup_timeout": {
+                    "title": "Time in milliseconds to wait for the web worker to be ready.",
+                    "oneOf": [{
+                        "type": "number",
+                        "minimum": 0
+                    }, {
+                        "type": "string",
+                        "enum": [""]
+                    }],
+                    "default": 1000
+                }
+            },
+            "additionalProperties": false
         }
     },
     "additionalProperties": false,
