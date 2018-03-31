@@ -376,7 +376,7 @@ add_action('init', function() {
                 <div class="suboption">
                     <h5 class="h">&nbsp;Fetch Timeout</h5>
                     <input type="number" name="o10n[pwa.background-fetch.timeout]" min="1" placeholder="5000" value="<?php $value('pwa.background-fetch.timeout'); ?>" style="width:120px;">
-                    <p class="description">Enter a time in milliseconds to wait for the background worker to resolve. The default is 15000ms.</p>
+                    <p class="description">Enter a time in milliseconds to wait for the background worker to resolve. The default is 5000ms.</p>
                 </div>
 
                 <div class="suboption">
