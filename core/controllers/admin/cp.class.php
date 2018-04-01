@@ -51,6 +51,9 @@ class AdminCP extends Controller implements Controller_Interface
 
         // enqueue hook / set client variables
         add_action('admin_enqueue_scripts', array( $this, 'enqueue' ), 10);
+
+        // create optimization plugin group
+        add_action('pre_current_active_plugins', array( $this, 'plugin_title'), 10);
     }
 
     /**
@@ -70,6 +73,37 @@ class AdminCP extends Controller implements Controller_Interface
         $this->AdminClient->set_lg(array(
             'search_page_placeholder' => __('Search a post/page/category by ID, name or URL...', 'o10n')
         ));
+    }
+
+    /**
+     * Plugin title modification
+     */
+    public function plugin_title()
+    {
+        ?><script>var o10n_enable_cb = function() {
+    var state = jQuery('#o10n_plugins .check-column input').first().prop('disabled');
+    jQuery('#o10n_plugins .check-column input').prop('disabled', (state) ? false : 'disabled');
+};
+var o10n_select_all = function() {
+    var state = jQuery('#o10n_plugins .check-column input').first().prop('checked');
+    jQuery('#o10n_plugins .check-column input').prop('checked', (state) ? false : true);
+};
+jQuery(function($){
+
+    // single plugin, ignore
+    if ($('.plugin-version-author-uri a[href*="optimization.team"]', $('#bulk-action-form table.plugins tbody').first()).length <= 1) {
+        return;
+    }
+
+    $('#bulk-action-form table.plugins').append('<thead><tr><td class="manage-column column-cb check-column" colspan="3"><h2 style="margin:0px;margin-left:5px;margin-bottom:5px;"><a href="https://optimization.team" target="_blank" class="g100" style="margin-right: 5px;">O10N</a> WordPress WPO Collection</h2></td></tr><tr><td colspan="3"><p><strong>Warning:</strong> The optimization plugins share a plugin core for single plugin performance when used as a combination of plugins. Make sure that you install all updates to ensure that all plugins are updated to the latest base core version.</p><p>It is extra important to be careful during the beta phase of the plugins. We will make updating the plugins more safe and reliable in the future.<p><button type="button" id="o10n_enable_cb" class="button button-small">Enable Checkboxes</button> <button type="button" id="o10n_select_all" class="button button-small">Select All</button></p></td></tr></thead><tbody id="o10n_plugins"></tbody>');
+
+    $('.plugin-version-author-uri a[href*="optimization.team"]', $('#bulk-action-form table.plugins tbody').first()).each(function(index,a) {
+        $('#o10n_plugins').append($(a).closest('tr'));
+    });
+    $('#o10n_plugins .check-column input').prop('disabled', 'disabled');
+    $('#o10n_enable_cb').on('click', o10n_enable_cb);
+    $('#o10n_select_all').on('click', o10n_select_all);
+});</script><?php
     }
 
     /**
