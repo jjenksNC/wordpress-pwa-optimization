@@ -50,7 +50,7 @@ Documentation is available on [Github](https://github.com/o10n-x/wordpress-pwa-o
 
 = 0.0.7 =
 * Bugfix: Service Worker file not saved after previous update.
-* Added: Smart Preload option: attach additional assets to Service Worker Fetch requests via `X-O10N-SW-PRELOAD` header or `O10n\attach_preload()` method.
+* Added: Smart Preload option: attach additional assets to Service Worker Fetch requests via `X-O10N-SW-PRELOAD` header or `O10n\attach_preload()` method. Sz`imilar advantage of HTTP/2 Server Push via Service Worker.
 * Added: Background Fetch option: significantly improve Service Worker performance during fast navigation or on devices with a slow internet connection.
 
 = 0.0.6 =

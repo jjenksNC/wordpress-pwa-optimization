@@ -29,8 +29,13 @@
                         },
                         "position": {
                             "title": "Line break position.",
-                            "type": "number",
-                            "minimum": 1
+                            "oneOf": [{
+                                "type": "string",
+                                "enum": [""]
+                            }, {
+                                "type": "number",
+                                "minimum": 1
+                            }]
                         }
                     },
                     "additionalProperties": false
@@ -45,9 +50,14 @@
                         },
                         "value": {
                             "title": "Time in seconds to allow minifier to complete.",
-                            "type": "number",
-                            "minimum": 1,
-                            "placeholder": "Default is 60 seconds",
+                            "oneOf": [{
+                                "type": "string",
+                                "enum": [""]
+                            }, {
+                                "type": "number",
+                                "minimum": 1,
+                                "placeholder": "Default is 60 seconds"
+                            }],
                             "default": 60
                         }
                     },
@@ -80,9 +90,14 @@
                             "default": true
                         },
                         "value": {
-                            "type": "number",
-                            "minimum": 1,
-                            "placeholder": "Default is 1000000",
+                            "oneOf": [{
+                                "type": "string",
+                                "enum": [""]
+                            }, {
+                                "type": "number",
+                                "minimum": 1,
+                                "placeholder": "Default is 1000000"
+                            }],
                             "default": 1000000
                         }
                     },
@@ -97,9 +112,14 @@
                             "default": true
                         },
                         "value": {
-                            "type": "number",
-                            "minimum": 1,
-                            "placeholder": "Default is 500000",
+                            "oneOf": [{
+                                "type": "string",
+                                "enum": [""]
+                            }, {
+                                "type": "number",
+                                "minimum": 1,
+                                "placeholder": "Default is 500000"
+                            }],
                             "default": 500000
                         }
                     },

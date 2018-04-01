@@ -401,6 +401,16 @@ class AdminForm extends Controller implements Controller_Interface
                     $suboption = array_merge($refSchema, $suboption);
                 }
 
+                if (isset($suboption['oneOf'])) {
+
+                    // number with empty option
+                    if (isset($suboption['oneOf'][0]) && isset($suboption['oneOf'][0]['type']) && $suboption['oneOf'][0]['type'] === 'string' && isset($suboption['oneOf'][0]['enum']) && $suboption['oneOf'][0]['enum'][0] === '') {
+                        $json_key = $suboption['json_key'];
+                        $suboption = $suboption['oneOf'][1];
+                        $suboption['json_key'] = $json_key;
+                    }
+                }
+
                 // default value
                 //if (isset($suboption['default'])) {
                 //    $option['default_value'] = $suboption['default'];
