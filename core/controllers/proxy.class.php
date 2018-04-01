@@ -70,16 +70,40 @@ class Proxy extends Controller implements Controller_Interface
 
             // capture list
             $capture = array();
-            $capture_regex = array();
+            $capture_match = array();
             if (is_array($proxyList)) {
                 foreach ($proxyList as $url) {
                     if (is_array($url)) {
-                        if (!isset($url['url'])) {
-                            continue;
+                        if (!isset($url['delete']) && !isset($url['rewrite']) && !isset($url['url'])) {
+                            continue 1;
                         }
-                        $proxyHash = $this->proxify('css', $url['url'], 'hash');
-                        if ($proxyHash) {
-                            $capture_regex[] = array($url['match'],$proxyHash);
+
+                        $regex = (isset($url['regex']) && $url['regex']);
+                        $match = false;
+
+                        // delete
+                        if (isset($url['delete'])) {
+                            $match = array($url['match'],1);
+                            if ($regex) {
+                                $match[] = 1;
+                            }
+                        } elseif (isset($url['rewrite'])) {
+                            $match = array($url['match'],array($url['rewrite']));
+                            if ($regex) {
+                                $match[] = 1;
+                            }
+                        } elseif (isset($url['url'])) {
+                            $proxyHash = $this->proxify('css', $url['url'], 'hash');
+                            if ($proxyHash) {
+                                $match = array($url['match'],$proxyHash);
+                                if ($regex) {
+                                    $match[] = 1;
+                                }
+                            }
+                        }
+
+                        if ($match) {
+                            $capture_match[] = $match;
                         }
                     } else {
                         $proxyHash = $this->proxify('css', $url, 'hash');
@@ -97,9 +121,9 @@ class Proxy extends Controller implements Controller_Interface
                 // load client module
                 $loadProxyModule = true;
             }
-            if (!empty($capture_regex)) {
+            if (!empty($capture_match)) {
                 // set enabled state
-                $this->client->set_config('css', 'proxy_regex', $capture_regex);
+                $this->client->set_config('css', 'proxy_match', $capture_match);
 
                 // load client module
                 $loadProxyModule = true;
@@ -114,16 +138,40 @@ class Proxy extends Controller implements Controller_Interface
 
             // capture list
             $capture = array();
-            $capture_regex = array();
+            $capture_match = array();
             if (is_array($proxyList)) {
                 foreach ($proxyList as $url) {
                     if (is_array($url)) {
-                        if (!isset($url['url'])) {
-                            continue;
+                        if (!isset($url['delete']) && !isset($url['rewrite']) && !isset($url['url'])) {
+                            continue 1;
                         }
-                        $proxyHash = $this->proxify('js', $url['url'], 'hash');
-                        if ($proxyHash) {
-                            $capture_regex[] = array($url['match'],$proxyHash);
+                       
+                        $regex = (isset($url['regex']) && $url['regex']);
+                        $match = false;
+
+                        // delete
+                        if (isset($url['delete'])) {
+                            $match = array($url['match'],1);
+                            if ($regex) {
+                                $match[] = 1;
+                            }
+                        } elseif (isset($url['rewrite'])) {
+                            $match = array($url['match'],array($url['rewrite']));
+                            if ($regex) {
+                                $match[] = 1;
+                            }
+                        } elseif (isset($url['url'])) {
+                            $proxyHash = $this->proxify('js', $url['url'], 'hash');
+                            if ($proxyHash) {
+                                $match = array($url['match'],$proxyHash);
+                                if ($regex) {
+                                    $match[] = 1;
+                                }
+                            }
+                        }
+
+                        if ($match) {
+                            $capture_match[] = $match;
                         }
                     } else {
                         $proxyHash = $this->proxify('js', $url, 'hash');
@@ -142,9 +190,10 @@ class Proxy extends Controller implements Controller_Interface
                 // load client module
                 $loadProxyModule = true;
             }
-            if (!empty($capture_regex)) {
+            if (!empty($capture_match)) {
+
                 // set enabled state
-                $this->client->set_config('js', 'proxy_regex', $capture_regex);
+                $this->client->set_config('js', 'proxy_match', $capture_match);
 
                 // load client module
                 $loadProxyModule = true;
