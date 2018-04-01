@@ -441,12 +441,12 @@ class Pwa extends Controller implements Controller_Interface
         // preload assets
         
         // apply filters
-        $this->preload = apply_filters('abtf_pwa_preload', $this->preload);
+        $this->preload = apply_filters('o10n_sw_preload', $this->options->get('pwa.cache.preload', array()));
 
         if (!empty($this->preload)) {
             $config[$this->client->config_index('pwa', 'preload')] = $this->preload;
 
-            $config[$this->client->config_index('pwa', 'preload_before_install')] = (isset($this->CTRL->options['pwa_cache_preload_require']) && $this->CTRL->options['pwa_cache_preload_require']) ? true : false;
+            $config[$this->client->config_index('pwa', 'preload_before_install')] = $this->options->bool('pwa.cache.preload_on_install');
         }
 
         if (isset($manifest['start_url']) && $manifest['start_url']) {
