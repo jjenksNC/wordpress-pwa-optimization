@@ -460,7 +460,7 @@ class Pwa extends Controller implements Controller_Interface
 
         $max_size = $this->options->get('pwa.cache.max_size');
         if ($max_size) {
-            $config[$this->client->config_index('pwa', 'max_size')] = $max_size;
+            $config[$this->client->config_index('pwa', 'cache_max_size')] = $max_size;
         }
 
         return $config;
