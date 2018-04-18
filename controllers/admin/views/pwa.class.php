@@ -162,7 +162,9 @@ class AdminViewPwa extends AdminViewBase
 
                         'pwa.background-fetch.enabled' => 'bool',
 
-                        'pwa.bypass.enabled' => 'bool'
+                        'pwa.bypass.enabled' => 'bool',
+
+                        'pwa.offline_class' => 'bool'
                     ));
 
                     if ($forminput->bool('pwa.background-fetch.enabled')) {
