@@ -87,8 +87,7 @@
                                 },
                                 "replace": {
                                     "title": "The URL to replace a matched URL with, used for caching and processing.",
-                                    "type": "string",
-                                    "format": "uri"
+                                    "type": "string"
                                 }
                             },
                             "required": ["url", "replace"],
