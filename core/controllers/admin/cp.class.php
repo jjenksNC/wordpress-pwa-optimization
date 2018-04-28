@@ -113,7 +113,10 @@ jQuery(function($){
     $('#bulk-action-form table.plugins').append('<thead><tr><td class="manage-column column-cb check-column" colspan="3"><h2 style="margin:0px;margin-left:5px;margin-bottom:5px;margin-top:5px;cursor:pointer;" id="o10n_toggle"><span class="dashicons dashicons-arrow-down-alt2 arr"></span> WordPress WPO Collection</h2></td></tr><tr id="o10n_plugins_collapsed"><td colspan="3" style="padding:0px;padding-left:10px;padding-top:5px;"><p style="color:#aaa;">The optimization plugins are hidden.</p></td></tr><tr id="o10n_plugins_headline" style="display:none;"><td colspan="3"><p><strong>Warning:</strong> The optimization plugins share a plugin core for single plugin performance. Make sure that you install all updates to ensure that all plugins are updated to the latest base core version.</p><p>The plugins are in beta. We will make updating the plugins more easy in the future.<p><button type="button" id="o10n_select_all" class="button button-small">Toggle Select All</button></p></td></tr></thead><tbody id="o10n_plugins" style="display:none;"></tbody>');
 
     $('.plugin-version-author-uri a[href*="optimization.team"]', $('#bulk-action-form table.plugins tbody').first()).each(function(index,a) {
-        $('#o10n_plugins').append($(a).closest('tr'));
+        var slug = $(a).closest('tr').data('slug');
+        $('tr[data-slug="'+slug+'"]').each(function(index,tr) {
+            $('#o10n_plugins').append($(tr));
+        });
     });
     $('#o10n_plugins .check-column input').prop('disabled', 'disabled');
     $('#o10n_toggle').on('click', o10n_toggle_plugins);
