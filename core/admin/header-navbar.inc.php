@@ -79,7 +79,12 @@ foreach ($tabs as $tabkey => $tabinfo) {
     } else {
         $title = $tabinfo['title'];
     }
-    print '<a class="nav-tab'.$class.'" href="'.esc_url($url).'" title="'.esc_attr((isset($tabinfo['title_attr'])) ? $tabinfo['title_attr'] : $tabinfo['title']).'">'.$title.'</a>';
+    if (isset($tabinfo['target'])) {
+        $target = $tabinfo['target'];
+    } else {
+        $target = '';
+    }
+    print '<a class="nav-tab'.$class.'" href="'.esc_url($url).'" title="'.esc_attr((isset($tabinfo['title_attr'])) ? $tabinfo['title_attr'] : $tabinfo['title']).'"'.(($target) ? ' target="'.esc_attr($target).'"' : '').'>'.$title.'</a>';
 }
 ?>
 

@@ -80,9 +80,24 @@ class AdminCP extends Controller implements Controller_Interface
      */
     public function plugin_title()
     {
-        ?><script>var o10n_enable_cb = function() {
+        ?><script>var o10n_toggle_plugins = function() {
     var state = jQuery('#o10n_plugins .check-column input').first().prop('disabled');
-    jQuery('#o10n_plugins .check-column input').prop('disabled', (state) ? false : 'disabled');
+    if (state) {
+        jQuery('#o10n_plugins .check-column input').prop('disabled', false);
+        jQuery('#o10n_plugins_headline').fadeIn(250);
+        jQuery('#o10n_plugins').show();
+        jQuery('#o10n_plugins_collapsed').hide();
+        jQuery('#o10n_toggle .arr').removeClass('dashicons-arrow-down-alt2');
+        jQuery('#o10n_toggle .arr').addClass('dashicons-arrow-up-alt2');
+    } else {
+        jQuery('#o10n_plugins .check-column input').prop('disabled', 'disabled');
+        jQuery('#o10n_plugins_headline').hide();
+        jQuery('#o10n_plugins').hide();
+        jQuery('#o10n_plugins_collapsed').show();
+        jQuery('#o10n_toggle .arr').addClass('dashicons-arrow-down-alt2');
+        jQuery('#o10n_toggle .arr').removeClass('dashicons-arrow-up-alt2');
+    }
+    
 };
 var o10n_select_all = function() {
     var state = jQuery('#o10n_plugins .check-column input').first().prop('checked');
@@ -95,13 +110,13 @@ jQuery(function($){
         return;
     }
 
-    $('#bulk-action-form table.plugins').append('<thead><tr><td class="manage-column column-cb check-column" colspan="3"><h2 style="margin:0px;margin-left:5px;margin-bottom:5px;margin-top:5px;"><a href="https://optimization.team" target="_blank" class="g100" style="margin-right: 5px;">O10N</a> WordPress WPO Collection</h2></td></tr><tr><td colspan="3"><p><strong>Warning:</strong> The optimization plugins share a plugin core for single plugin performance when used as a combination of plugins. Make sure that you install all updates to ensure that all plugins are updated to the latest base core version.</p><p>It is extra important to be careful during the beta phase of the plugins. We will make updating the plugins more safe and reliable in the future.<p><button type="button" id="o10n_enable_cb" class="button button-small">Enable Checkboxes</button> <button type="button" id="o10n_select_all" class="button button-small">Select All</button></p></td></tr></thead><tbody id="o10n_plugins"></tbody>');
+    $('#bulk-action-form table.plugins').append('<thead><tr><td class="manage-column column-cb check-column" colspan="3"><h2 style="margin:0px;margin-left:5px;margin-bottom:5px;margin-top:5px;cursor:pointer;" id="o10n_toggle"><span class="dashicons dashicons-arrow-down-alt2 arr"></span> WordPress WPO Collection</h2></td></tr><tr id="o10n_plugins_collapsed"><td colspan="3" style="padding:0px;padding-left:10px;padding-top:5px;"><p style="color:#aaa;">The optimization plugins are hidden.</p></td></tr><tr id="o10n_plugins_headline" style="display:none;"><td colspan="3"><p><strong>Warning:</strong> The optimization plugins share a plugin core for single plugin performance. Make sure that you install all updates to ensure that all plugins are updated to the latest base core version.</p><p>The plugins are in beta. We will make updating the plugins more easy in the future.<p><button type="button" id="o10n_select_all" class="button button-small">Toggle Select All</button></p></td></tr></thead><tbody id="o10n_plugins" style="display:none;"></tbody>');
 
     $('.plugin-version-author-uri a[href*="optimization.team"]', $('#bulk-action-form table.plugins tbody').first()).each(function(index,a) {
         $('#o10n_plugins').append($(a).closest('tr'));
     });
     $('#o10n_plugins .check-column input').prop('disabled', 'disabled');
-    $('#o10n_enable_cb').on('click', o10n_enable_cb);
+    $('#o10n_toggle').on('click', o10n_toggle_plugins);
     $('#o10n_select_all').on('click', o10n_select_all);
 });</script><?php
     }

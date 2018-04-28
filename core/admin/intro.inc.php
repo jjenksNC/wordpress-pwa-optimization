@@ -30,11 +30,20 @@ $module_name = 'Performance Optimization';
 
 			<p class="about-text" style="min-height:inherit;">Thank you for using performance optimization plugins by <a href="https://optimization.team/" target="_blank" rel="noopener" style="color:black;text-decoration:none;">Optimization.Team</a>.</p>
 
-			<p class="about-text" style="min-height:inherit;">You are using a selection of standalone optimization modules. To achieve optimal performance, the plugins automatically function as a single plugin when used in combination. The goal of the optimization plugins is to achieve the absolute best website performance possible.</p>
+			<p class="about-text info_white" style="min-height:inherit;border-color:#0073aa;background:#f1faff;"><strong><span class="dashicons dashicons-welcome-comments" style="line-height: 32px;font-size: 34px;width: inherit;color:#0073aa;"></span></strong> The optimization plugins have been removed from WordPress.org. Read the story <a href="https://github.com/o10n-x/wordpress-css-optimization/issues/4" target="_blank">here</a>.</p>
 
-			<p class="about-text info_yellow" style="min-height:inherit;"><strong>Warning:</strong> This plugin is intended for optimization professionals and advanced WordPress users.</p>
+			<br />
 
-			<p class="about-text" style="min-height:inherit;">Search WordPress.org for <a href="<?php print esc_url(add_query_arg(array('s' => 'o10n', 'tab' => 'search', 'type' => 'author'), admin_url('plugin-install.php'))); ?>">author o10n</a> or visit our <A href="https://github.com/o10n-x/" target="_blank" rel="noopener">Github</a> for more optimization plugins.</p>
+			<img src="<?php print O10N_CORE_URI; ?>admin/images/google-lighthouse.png" alt="Google Lighthouse" height="50" border="0">
+
+			<p class="about-text" style="min-height:inherit;">You are using a selection of optimization plugins that automatically merge to achieve single plugin performance. The plugins are designed to achieve perfect <a href="https://developers.google.com/web/tools/lighthouse/" target="_blank">Google Lighthouse</a> scores.</p>
+
+			<div style="float:left; margin-right:10px;">
+				<a href="https://github.com/afragen/github-updater" target="_blank" rel="noopener"><img src="<?php print O10N_CORE_URI; ?>admin/images/github-updater.png" alt="Github Updater" width="180" height="180" border="0" style="float:right;"></a>
+			</div>
+
+			<p class="about-text" style="min-height:inherit;">You can install and update the optimization plugins via <a href="https://github.com/afragen/github-updater" target="_blank">GitHub Updater</a>.</p>
+			<p class="about-text" style="min-height:inherit;">The plugins are located on our GitHub profile: <a href="https://github.com/o10n-x/" target="_blank">https://github.com/o10n-x/</a></p>
 
 			<p class="about-text" style="min-height:inherit;">We are very interested to receive feedback and feature requests. The preferred way to send us feedback is using the <a href="https://github.com/o10n-x/" target="_blank" rel="noopener">Github community forums</a>.</p>
 			</div>

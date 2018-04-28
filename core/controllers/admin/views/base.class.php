@@ -37,31 +37,38 @@ class AdminViewBase extends Controller implements AdminView_Controller_Interface
     protected $wpo_module_tabs = array(
         'html' => array(
             'title' => 'HTML',
-            'title_attr' => 'HTML Optimization'
+            'title_attr' => 'HTML Optimization',
+            'github' => 'https://github.com/o10n-x/wordpress-html-optimization'
         ),
         'css' => array(
             'title' => 'CSS',
-            'title_attr' => 'CSS Optimization'
+            'title_attr' => 'CSS Optimization',
+            'github' => 'https://github.com/o10n-x/wordpress-css-optimization'
         ),
         'javascript' => array(
             'title' => 'Javascript',
-            'title_attr' => 'Javascript Optimization'
+            'title_attr' => 'Javascript Optimization',
+            'github' => 'https://github.com/o10n-x/wordpress-javascript-optimization'
         ),
         'pwa' => array(
             'title' => 'PWA / Service Worker',
-            'title_attr' => 'Progressive Web App Optimization'
+            'title_attr' => 'Progressive Web App Optimization',
+            'github' => 'https://github.com/o10n-x/wordpress-pwa-optimization'
         ),
         'fonts' => array(
             'title' => 'Fonts',
-            'title_attr' => 'Webfonts Optimization'
+            'title_attr' => 'Webfonts Optimization',
+            'github' => 'https://github.com/o10n-x/wordpress-font-optimization'
         ),
         'http2' => array(
             'title' => 'HTTP/2',
-            'title_attr' => 'HTTP/2 Optimization'
+            'title_attr' => 'HTTP/2 Optimization',
+            'github' => 'https://github.com/o10n-x/wordpress-http2-optimization'
         ),
         'security' => array(
             'title' => 'Security',
-            'title_attr' => 'Security Optimization'
+            'title_attr' => 'Security Optimization',
+            'github' => 'https://github.com/o10n-x/wordpress-security-header-optimization'
         )
     );
 
@@ -105,7 +112,8 @@ class AdminViewBase extends Controller implements AdminView_Controller_Interface
                 $settings['base'] = ($multiple_installed) ? 'admin.php' : $this->core->modules($module)->admin_base();
                 $settings['pagekey'] = $module;
             } else {
-                $settings['href'] = add_query_arg(array('s' => 'o10n', 'tab' => 'search', 'type' => 'author'), admin_url('plugin-install.php'));
+                $settings['href'] = $settings['github'];
+                $settings['target'] = '_blank';
             }
             $this->wpo_tabs[$module] = $settings;
         }
