@@ -100,7 +100,7 @@ class Output extends Controller implements Controller_Interface
                 return $this->fatal_error($err);
             }
         }
-        
+
         // apply search and replace
         $buffer = $this->apply_search_replace($buffer);
 
@@ -140,6 +140,7 @@ class Output extends Controller implements Controller_Interface
 
             // reset
             $this->search = array();
+            $this->replace = array();
         }
 
         // apply regex search & replace
@@ -152,6 +153,7 @@ class Output extends Controller implements Controller_Interface
 
             // reset
             $this->search_regex = array();
+            $this->replace_regex = array();
         }
 
         return $buffer;
