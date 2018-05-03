@@ -11,5 +11,5 @@
 // Cache prune cron (clear expired cache entries)
 function o10n_cron_prune_cache()
 {
-    Core::get('cache')->prune();
+    \O10n\Core::get('cache')->prune();
 }
