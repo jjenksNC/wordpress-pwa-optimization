@@ -147,6 +147,54 @@
                 }
             }
         },
+        "sw_push": {
+            "title": "Service Worker Push",
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "title": "Push stylesheets",
+                    "type": "boolean",
+                    "default": false
+                },
+                "filter": {
+                    "title": "Service Worker Push Filter",
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "title": "Filter stylesheets to push",
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "type": {
+                            "title": "Filter List Type",
+                            "type": "string",
+                            "enum": [
+                                "include",
+                                "exclude"
+                            ],
+                            "default": "include"
+                        },
+                        "include": {
+                            "type": "array",
+                            "items": {
+                                "title": "Stylesheets to include in push.",
+                                "type": "string"
+                            },
+                            "uniqueItems": true
+                        },
+                        "exclude": {
+                            "type": "array",
+                            "items": {
+                                "title": "Stylesheets to exclude in push.",
+                                "type": "string"
+                            },
+                            "uniqueItems": true
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            }
+        },
         "replace": {
             "title": "CSS search and replace",
             "description": "This option enables to replace strings in the CSS.",

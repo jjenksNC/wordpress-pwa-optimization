@@ -148,6 +148,54 @@
                 }
             }
         },
+        "sw_push": {
+            "title": "Service Worker Push",
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "title": "Push scripts",
+                    "type": "boolean",
+                    "default": false
+                },
+                "filter": {
+                    "title": "Service Worker Push Filter",
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "title": "Filter scripts to push",
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "type": {
+                            "title": "Filter List Type",
+                            "type": "string",
+                            "enum": [
+                                "include",
+                                "exclude"
+                            ],
+                            "default": "include"
+                        },
+                        "include": {
+                            "type": "array",
+                            "items": {
+                                "title": "Scripts to include in push.",
+                                "type": "string"
+                            },
+                            "uniqueItems": true
+                        },
+                        "exclude": {
+                            "type": "array",
+                            "items": {
+                                "title": "Scripts to exclude in push.",
+                                "type": "string"
+                            },
+                            "uniqueItems": true
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            }
+        },
         "replace": {
             "title": "Javascript search and replace",
             "description": "This option enables to replace strings in the javascript.",
