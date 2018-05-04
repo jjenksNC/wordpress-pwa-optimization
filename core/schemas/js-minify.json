@@ -193,6 +193,22 @@
                                     "fallback_minifier": {
                                         "$ref": "js-minify.json#/definitions/fallback_minifier"
                                     },
+                                    "dependency": {
+                                        "title": "Dependency configuration",
+                                        "oneOf": [{
+                                            "title": "A string to match a script URL or contact group key.",
+                                            "type": "string",
+                                            "minLength": 1
+                                        }, {
+                                            "title": "An array of script URLs or contact group keys.",
+                                            "type": "array",
+                                            "items": {
+                                                "title": "A string to match a script URL or contact group key.",
+                                                "type": "string"
+                                            },
+                                            "uniqueItems": true
+                                        }]
+                                    },
                                     "exclude": {
                                         "title": "Exclude from concatenation",
                                         "type": "boolean",

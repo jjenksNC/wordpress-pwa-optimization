@@ -135,6 +135,22 @@
                             "exec_timing": {
                                 "$ref": "timed-exec.json#/definitions/timingMethods"
                             },
+                            "dependency": {
+                                "title": "Dependency configuration",
+                                "oneOf": [{
+                                    "title": "A string to match a script URL or contact group key.",
+                                    "type": "string",
+                                    "minLength": 1
+                                }, {
+                                    "title": "An array of script URLs or contact group keys.",
+                                    "type": "array",
+                                    "items": {
+                                        "title": "A string to match a script URL or contact group key.",
+                                        "type": "string"
+                                    },
+                                    "uniqueItems": true
+                                }]
+                            },
                             "localStorage": {
                                 "title": "Override script cache configuration",
                                 "oneOf": [{
