@@ -21,7 +21,7 @@ list($base_tab, $active_tab, $active_subtab) = $view->active_tab();
 
 ?>
 	<nav class="nav-tab-wrapper">
-        <a href="<?php print esc_url(add_query_arg(array('page' => 'o10n'), admin_url('admin.php'))); ?>" style="padding:0px;margin:0px;float:right;padding-top: 5px;color: #555;font-size: 1.3em; font-weight:bold;text-decoration:none;">WordPress WPO</a>
+        <a class="nav-tab" href="<?php print esc_url(add_query_arg(array('page' => 'o10n'), admin_url('admin.php'))); ?>" style="float:right;" title="WordPress WPO"><span class="dashicons dashicons-dashboard"></span> WPO</a>
 <?php
 foreach ($tabs as $tabkey => $tabinfo) {
     $class = '';
@@ -85,10 +85,6 @@ foreach ($tabs as $tabkey => $tabinfo) {
         $target = '';
     }
     print '<a class="nav-tab'.$class.'" href="'.esc_url($url).'" title="'.esc_attr((isset($tabinfo['title_attr'])) ? $tabinfo['title_attr'] : $tabinfo['title']).'"'.(($target) ? ' target="'.esc_attr($target).'"' : '').'>'.$title.'</a>';
-
-    if ($tabkey === 'intro') {
-        print '<a class="nav-tab" href="'.esc_url(add_query_arg(array('page' => 'o10n'), admin_url('admin.php'))).'" title="WordPress WPO">WPO</a>';
-    }
 }
 ?>
 
