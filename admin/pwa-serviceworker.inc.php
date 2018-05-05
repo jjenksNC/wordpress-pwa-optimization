@@ -303,7 +303,7 @@ submit_button(__('Save'), 'primary large', 'is_submit', false);
     <tr valign="top" data-ns="pwa"<?php $visible('pwa');  ?>>
         <th scope="row">Smart Preloading</th>
         <td>
-                <p class="description">When a page or asset is loaded by the Service Worker you can automatically preload additional assets via the <code>X-O10N-SW-PRELOAD: asset, asset [, ...]</code> header. You can control the header using the method <code>O10n\attach_preload()</code>.(<a href="javascript:void(0);" onclick="jQuery('#preload_header_example').fadeToggle();">show example</a>)</p>
+                <p class="description">When a page or asset is loaded by the Service Worker you can automatically preload additional assets via the <code>X-O10N-SW-PRELOAD: asset, asset [, ...]</code> header. You can control the header using the method <code>\O10n\attach_preload()</code>.(<a href="javascript:void(0);" onclick="jQuery('#preload_header_example').fadeToggle();">show example</a>)</p>
             <div class="info_yellow" id="preload_header_example" style="display:none;"><strong>Example:</strong> <pre class="clickselect" title="<?php print esc_attr('Click to select', 'optimization'); ?>" style="cursor:copy;padding: 10px;margin: 0 1px;margin-top:5px;font-size: 13px;">
 /* Attach assets to page for smart preloading in the Service Worker */
 add_action('init', function() {
@@ -311,10 +311,10 @@ add_action('init', function() {
     if (function_exists('O10n\attach_preload')) {
 
         // attach single asset to page
-        O10n\attach_preload('/path/to/image.jpg');
+        \O10n\attach_preload('/path/to/image.jpg');
 
         // attach multiple assets to page
-        O10n\attach_preload(array('/path/to/image.jpg', 'https://cdn.google.com/script.js'));
+        \O10n\attach_preload(array('/path/to/image.jpg', 'https://cdn.google.com/script.js'));
 
     }
 
