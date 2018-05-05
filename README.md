@@ -29,6 +29,8 @@ The WPO optimization plugins are designed to work together with single plugin pe
 
 The WPO optimization plugins are based on JSON schema based configuration that enables full control of the optimization using a simple JSON document. This provides several great advantages for website performance optimization.
 
+View [JSON schemas](https://github.com/o10n-x/wordpress-o10n-core/tree/master/schemas)
+
 #### Advantage 1: platform independent
 
 The WPO plugins are not like most other WordPress plugins. The plugins are purely focused on optimization technologies instead of controlling / modifying WordPress. This makes the underlaying optimization technologies platform independent. The same technologies and configuration can be used on Magento, a Microsoft .NET CMS or a Node.js based CMS. 
