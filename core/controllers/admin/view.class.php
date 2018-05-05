@@ -147,10 +147,13 @@ class AdminView extends Controller implements Controller_Interface
                 }
 
                 // extract view from page paramater
-                $this->active_view = ($_GET['page'] === 'o10n') ? 'intro' : substr($_GET['page'], 5);
+                $this->active_view = ($_GET['page'] === 'o10n') ? 'settings' : substr($_GET['page'], 5);
 
-                // tab specific view controller
-                if (isset($_GET['tab']) && isset($this->view_controllers[$this->active_view . '-' . $_GET['tab']])) {
+                if ($_GET['page'] === 'o10n' && isset($_GET['tab']) && !isset($this->view_controllers[$this->active_view . '-' . $_GET['tab']])) {
+                    $this->active_view = 'installer';
+
+                    // tab specific view controller
+                } elseif (isset($_GET['tab']) && isset($this->view_controllers[$this->active_view . '-' . $_GET['tab']])) {
                     $this->active_view = $this->active_view . '-' . $_GET['tab'];
                 } elseif (!isset($this->view_controllers[$this->active_view])) {
                     throw new Exception('Invalid view <strong>' . esc_html($this->active_view) . '</strong>', 'admin');

@@ -22,13 +22,9 @@ class AdminViewBase extends Controller implements AdminView_Controller_Interface
 
     // tab menu
     protected $wpo_tabs = array(
-        'intro' => array(
-            'title' => '<span class="dashicons dashicons-admin-home"></span>',
-            'title_attr' => 'Intro'
-        ),
         'settings' => array(
-            'title' => 'JSON Settings',
-            'title_attr' => 'JSON configuration profile editor',
+            'title' => 'JSON',
+            'title_attr' => 'JSON configuration',
             'pagekey' => 'settings'
         )
     );
@@ -38,36 +34,43 @@ class AdminViewBase extends Controller implements AdminView_Controller_Interface
         'html' => array(
             'title' => 'HTML',
             'title_attr' => 'HTML Optimization',
+            'name' => 'HTML Optimization',
             'github' => 'https://github.com/o10n-x/wordpress-html-optimization'
         ),
         'css' => array(
             'title' => 'CSS',
             'title_attr' => 'CSS Optimization',
+            'name' => 'CSS Optimization',
             'github' => 'https://github.com/o10n-x/wordpress-css-optimization'
         ),
-        'javascript' => array(
+        'js' => array(
             'title' => 'Javascript',
             'title_attr' => 'Javascript Optimization',
+            'name' => 'Javascript Optimization',
             'github' => 'https://github.com/o10n-x/wordpress-javascript-optimization'
         ),
         'pwa' => array(
             'title' => 'PWA / Service Worker',
             'title_attr' => 'Progressive Web App Optimization',
+            'name' => 'PWA Optimization',
             'github' => 'https://github.com/o10n-x/wordpress-pwa-optimization'
         ),
         'fonts' => array(
             'title' => 'Fonts',
             'title_attr' => 'Webfonts Optimization',
+            'name' => 'Webfonts Optimization',
             'github' => 'https://github.com/o10n-x/wordpress-font-optimization'
         ),
         'http2' => array(
             'title' => 'HTTP/2',
             'title_attr' => 'HTTP/2 Optimization',
+            'name' => 'HTTP/2 Optimization',
             'github' => 'https://github.com/o10n-x/wordpress-http2-optimization'
         ),
         'security' => array(
             'title' => 'Security',
-            'title_attr' => 'Security Optimization',
+            'title_attr' => 'Security Header Optimization',
+            'name' => 'Security Header Optimization',
             'github' => 'https://github.com/o10n-x/wordpress-security-header-optimization'
         )
     );
@@ -112,8 +115,8 @@ class AdminViewBase extends Controller implements AdminView_Controller_Interface
                 $settings['base'] = ($multiple_installed) ? 'admin.php' : $this->core->modules($module)->admin_base();
                 $settings['pagekey'] = $module;
             } else {
-                $settings['href'] = $settings['github'];
-                $settings['target'] = '_blank';
+                //$settings['href'] = $settings['github'];
+                //$settings['target'] = '_blank';
             }
             $this->wpo_tabs[$module] = $settings;
         }
@@ -134,6 +137,20 @@ class AdminViewBase extends Controller implements AdminView_Controller_Interface
     public static function view_key()
     {
         return static::$view_key;
+    }
+
+    /**
+     * Return module tab config
+     *
+     * @return array module tab
+     */
+    public function module_tab_info()
+    {
+        if (!isset($_GET['tab'])) {
+            return false;
+        }
+
+        return (isset($this->wpo_module_tabs[$_GET['tab']])) ? $this->wpo_module_tabs[$_GET['tab']] : false;
     }
 
     /**
@@ -187,7 +204,7 @@ class AdminViewBase extends Controller implements AdminView_Controller_Interface
 
             // extract tab from page
             $base = 'o10n';
-            $active_tab = (isset($_GET['tab']))? $_GET['tab'] : false;
+            $active_tab = (isset($_GET['tab']))? $_GET['tab'] : 'settings';
             $active_subtab = (isset($_GET['subtab']))? $_GET['subtab'] : false;
         } else {
             $base = 'o10n-' . $this->module_key;

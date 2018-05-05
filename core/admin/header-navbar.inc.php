@@ -85,6 +85,10 @@ foreach ($tabs as $tabkey => $tabinfo) {
         $target = '';
     }
     print '<a class="nav-tab'.$class.'" href="'.esc_url($url).'" title="'.esc_attr((isset($tabinfo['title_attr'])) ? $tabinfo['title_attr'] : $tabinfo['title']).'"'.(($target) ? ' target="'.esc_attr($target).'"' : '').'>'.$title.'</a>';
+
+    if ($tabkey === 'intro') {
+        print '<a class="nav-tab" href="'.esc_url(add_query_arg(array('page' => 'o10n'), admin_url('admin.php'))).'" title="WordPress WPO">WPO</a>';
+    }
 }
 ?>
 

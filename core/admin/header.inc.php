@@ -22,7 +22,7 @@ if (!defined('ABSPATH')) {
     <h1 class="o10n-title"><strong><?php if ($view->module) {
             print $view->module->name();
         } else {
-            print 'WordPress WPO Collection';
+            print 'WordPress WPO <em>- Website Performance Optimization</em>';
         } ?></strong></h1>
 
     <div id="o10n-notices"><?php

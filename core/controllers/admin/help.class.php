@@ -126,8 +126,8 @@ class AdminHelp extends Controller implements Controller_Interface
 
         $screen->set_help_sidebar(
                 '<p><strong>' . __('For more information:', 'o10n') . '</strong></p>' .
-                '<p><a href="' . esc_url('https://github.com/o10n-x/') . '" target="_blank" rel="noopener">' . __('About o10n-x', 'o10n') . '</a></p>' .
-                '<p><a href="' . esc_url($module_wordpress) . '" target="_blank" rel="noopener">' . __('WordPress.org Project', 'o10n') . '</a></p>' .
+                '<p><a href="' . esc_url('https://optimization.team/') . '" target="_blank" rel="noopener">' . __('Optimization.Team', 'o10n') . '</a></p>' .
+                '<p><a href="' . esc_url('https://github.com/o10n-x/') . '" target="_blank" rel="noopener">' . __('Github Profile', 'o10n') . '</a></p>' .
                 '<p><a href="' . esc_url($module_github) . '" target="_blank" rel="noopener">' . __('Github Project', 'o10n') . '</a></p>' .
                 '<p><a href="' . esc_url($module_docs) . '" target="_blank" rel="noopener">' . __('Documentation', 'o10n') . '</a></p>'
             );
