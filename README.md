@@ -27,7 +27,7 @@ The WPO optimization plugins are designed to work together with single plugin pe
 
 ### JSON shema configuration
 
-The WPO optimization plugins are based on JSON schema configuration that enables full control of the optimization using a simple JSON document. This provides several great advantages for website performance optimization.
+The WPO optimization plugins are based on JSON schema based configuration that enables full control of the optimization using a simple JSON document. This provides several great advantages for website performance optimization.
 
 #### Advantage 1: platform independent
 
