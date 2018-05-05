@@ -4,6 +4,9 @@
 
 Advanced Progressive Web App and Service Worker optimization toolkit. Cache strategy, offline browsing, preloading, Google Lighthouse PWA validation and more.
 
+* [Documentation](https://github.com/o10n-x/wordpress-pwa-optimization/tree/master/docs)
+* [Description](https://github.com/o10n-x/wordpress-pwa-optimization#description)
+
 **This plugin is removed from WordPress.org. Read the story [here](https://github.com/o10n-x/wordpress-css-optimization/issues/4).**
 
 ## Installation
