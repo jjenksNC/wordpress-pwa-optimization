@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/o10n-x/wordpress-pwa-optimization.svg?branch=master)](https://travis-ci.org/o10n-x/wordpress-pwa-optimization)
+[![Build Status](https://travis-ci.org/o10n-x/wordpress-pwa-optimization.svg?branch=master)](https://travis-ci.org/o10n-x/wordpress-pwa-optimization) ![Version](https://img.shields.io/github/release/o10n-x/wordpress-pwa-optimization.svg)
 
 # WordPress Progressive Web App Optimization
 
