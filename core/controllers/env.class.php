@@ -21,6 +21,8 @@ class Env extends Controller implements Controller_Interface
 
     private $is_ssl = null;
 
+    private $disabled = false;
+
     /**
      * Load controller
      *
@@ -87,6 +89,10 @@ class Env extends Controller implements Controller_Interface
     final public function is_optimization($reset = false)
     {
         if (defined('O10N_DISABLED') && O10N_DISABLED) {
+            return false;
+        }
+
+        if ($this->disabled) {
             return false;
         }
 
@@ -183,5 +189,13 @@ class Env extends Controller implements Controller_Interface
         }
 
         return true; // enabled
+    }
+
+    /**
+     * Disable optimization
+     */
+    final public function disable($state = true)
+    {
+        $this->disabled = $state;
     }
 }

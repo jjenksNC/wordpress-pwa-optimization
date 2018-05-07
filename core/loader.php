@@ -24,7 +24,7 @@ if (defined('O10N_CORE_VERSION')) {
     return;
 }
 
-define('O10N_CORE_VERSION', '0.0.46');
+define('O10N_CORE_VERSION', '0.0.47');
 define('O10N_CORE_URI', \plugin_dir_url(__FILE__));
 define('O10N_CORE_PATH', \plugin_dir_path(__FILE__));
 
