@@ -272,7 +272,7 @@ class Url extends Controller implements Controller_Interface
     }
 
     /**
-     * Return URL of request
+     * Return current request URL
      *
      * @return string URL of requested page.
      */

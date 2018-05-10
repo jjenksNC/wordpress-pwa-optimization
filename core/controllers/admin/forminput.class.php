@@ -128,7 +128,7 @@ class AdminForminput extends Controller implements Controller_Interface
 
         // apply input filters
         apply_filters('o10n_save_settings_verify_input', $this);
-
+        
         return $this->verify_json($this->verified_input);
     }
 

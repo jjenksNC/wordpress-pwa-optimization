@@ -76,6 +76,9 @@
         "google-cdn": {
             "$ref": "google-cdn.json#"
         },
+        "filecache": {
+            "$ref": "filecache.json#"
+        },
         "cdn": {
             "title": "Content Delivery Network",
             "type": "object",

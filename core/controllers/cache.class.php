@@ -429,18 +429,12 @@ class Cache extends Controller implements Controller_Interface
             $hash_file_path = $path;
         }
 
-        // regular data
-        if (!$opcache) {
-
-            // verify data
+        // gzip compress data
+        if ($gzip === true) {
             if (!is_string($data)) {
                 throw new Exception('Cache data not string.', 'cache');
             }
-
-            // gzip compress data
-            if ($gzip === true) {
-                $data = gzdeflate($data, 9);
-            }
+            $data = gzdeflate($data, 9, FORCE_GZIP);
         }
 
         // write cache data to file
