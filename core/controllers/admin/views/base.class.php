@@ -72,6 +72,12 @@ class AdminViewBase extends Controller implements AdminView_Controller_Interface
             'title_attr' => 'Security Header Optimization',
             'name' => 'Security Header Optimization',
             'github' => 'https://github.com/o10n-x/wordpress-security-header-optimization'
+        ),
+        'pagecache' => array(
+            'title' => 'Page Cache',
+            'title_attr' => 'Page Cache',
+            'name' => 'Page Cache',
+            'installer_key' => 'pagecache'
         )
     );
 
