@@ -28,7 +28,7 @@ $module_version = $view->module->version();
 			
 			<p class="about-text" style="min-height:inherit;">This plugin is a toolkit for advanced Progressive Web App and Service Worker optimization for WordPress.</p>
 
-			<!--p class="about-text info_white" style="min-height:inherit;border-color:#0073aa;background:#f1faff;"><strong><span class="dashicons dashicons-welcome-comments" style="line-height: 32px;font-size: 34px;width: inherit;color:#0073aa;"></span></strong> The optimization plugins have been removed from WordPress.org. Read the story <a href="https://github.com/o10n-x/wordpress-css-optimization/issues/4" target="_blank">here</a>.</p-->
+			
 
 			<p class="about-text" style="min-height:inherit;">Getting started? Read <a href="https://developers.google.com/web/progressive-web-apps/" target="_blank">this article</a> about Progressive Web Apps and read <a href="https://developers.google.com/web/fundamentals/primers/service-workers/" target="_blank">this article</a> and <a href="https://developers.google.com/web/fundamentals/primers/service-workers/high-performance-loading" target="_blank">this article</a> about Service Worker Optimization by Google. Test your for website for PWA validation and performance using <a href="https://developers.google.com/web/tools/lighthouse/" target="_blank" rel="noopener">Google Lighthouse</a> (Chrome plugin).</p>
 
