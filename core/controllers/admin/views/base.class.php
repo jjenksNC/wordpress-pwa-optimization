@@ -78,6 +78,12 @@ class AdminViewBase extends Controller implements AdminView_Controller_Interface
             'title_attr' => 'Page Cache',
             'name' => 'Page Cache',
             'installer_key' => 'pagecache'
+        ),
+        'tools' => array(
+            'title' => 'Tools',
+            'title_attr' => 'Tools',
+            'name' => 'Tools',
+            'installer_key' => 'tools'
         )
     );
 
