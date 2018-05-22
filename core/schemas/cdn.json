@@ -26,6 +26,5 @@
             "type": "string"
         }
     },
-    "additionalProperties": false,
-    "required": ["enabled"]
+    "additionalProperties": false
 }

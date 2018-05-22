@@ -32,6 +32,7 @@ abstract class Controller
     protected $db;
     protected $cache;
     protected $url;
+    protected $regex;
     protected $options;
     protected $install;
     protected $shutdown;

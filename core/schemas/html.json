@@ -60,6 +60,114 @@
             }],
             "default": false
         },
+        "linkfilter": {
+            "title": "Filter links",
+            "description": "Filter href links in HTML.",
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "filter": {
+                    "title": "Link filter",
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "title": "Enable filter",
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "type": {
+                            "title": "Default include/exclude",
+                            "type": "string",
+                            "enum": [
+                                "include",
+                                "exclude"
+                            ],
+                            "default": "include"
+                        },
+                        "config": {
+                            "title": "Filter config",
+                            "type": "array",
+                            "items": {
+                                "$ref": "html.json#/definitions/linkFilter"
+                            },
+                            "uniqueItems": true
+                        }
+                    },
+                    "required": ["enabled", "type"],
+                    "additionalProperties": false
+                },
+                "rel_noopener": {
+                    "title": "Add rel=noopener",
+                    "description": "Add rel=noopener to links.",
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "type": {
+                            "type": "string",
+                            "enum": ["noopener", "noreferrer"],
+                            "default": "noopener"
+                        }
+                    },
+                    "required": ["enabled"],
+                    "additionalProperties": false
+                },
+                "observer": {
+                    "title": "Capture script injected links",
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "filter": {
+                            "title": "Link observer filter",
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "title": "Enable filter",
+                                    "type": "boolean",
+                                    "default": false
+                                },
+                                "type": {
+                                    "title": "Default include/exclude",
+                                    "type": "string",
+                                    "enum": [
+                                        "include",
+                                        "exclude"
+                                    ],
+                                    "default": "include"
+                                },
+                                "config": {
+                                    "title": "Filter config",
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "html.json#/definitions/linkFilter"
+                                    },
+                                    "uniqueItems": true
+                                }
+                            },
+                            "required": ["enabled", "type"],
+                            "additionalProperties": false
+                        }
+                    },
+                    "required": ["enabled"],
+                    "additionalProperties": false
+                },
+                "cdn": {
+                    "$ref": "cdn.json#"
+                }
+            },
+            "required": [
+                "enabled"
+            ],
+            "additionalProperties": false
+        },
         "replace": {
             "title": "HTML search and replace",
             "description": "This option enables to replace strings in the HTML.",
@@ -135,6 +243,86 @@
                 "custom"
             ],
             "default": "htmlphp"
+        },
+        "linkFilter": {
+            "oneOf": [{
+                "title": "A string to match a page URL.",
+                "type": "string",
+                "minLength": 1
+            }, {
+                "title": "Filter config object",
+                "type": "object",
+                "properties": {
+                    "match": {
+                        "title": "A string to match a link element.",
+                        "type": "string",
+                        "minLength": 1
+                    },
+                    "exclude": {
+                        "title": "Exclude link from filter/optimization.",
+                        "type": "boolean"
+                    },
+                    "regex": {
+                        "type": "boolean"
+                    },
+                    "rel_noopener": {
+                        "oneOf": [{
+                            "type": "boolean"
+                        }, {
+                            "title": "rel=noopener / noreferrer type",
+                            "type": "string",
+                            "enum": ["noopener", "noreferrer"],
+                            "default": "noopener"
+                        }]
+                    },
+                    "class": {
+                        "oneOf": [{
+                            "title": "A class name to add",
+                            "type": "string",
+                            "minLength": 1
+                        }, {
+                            "title": "An array of classes to add",
+                            "type": "array",
+                            "items": {
+                                "title": "A class name to add",
+                                "type": "string",
+                                "minLength": 1
+                            },
+                            "uniqueItems": true
+                        }]
+                    },
+                    "attributes": {
+                        "title": "An array of attributes to add",
+                        "type": "array",
+                        "items": {
+                            "title": "An attribute (param / value)",
+                            "type": "object",
+                            "properties": {
+                                "param": {
+                                    "type": "string",
+                                    "minLength": 1
+                                },
+                                "value": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": ["param", "value"],
+                            "additionalProperties": false
+                        },
+                        "uniqueItems": true
+                    },
+                    "cdn": {
+                        "oneOf": [{
+                            "title": "Enable/disable CDN",
+                            "type": "boolean"
+                        }, {
+                            "$ref": "cdn.json#"
+                        }]
+                    }
+                },
+                "required": ["match"],
+                "additionalProperties": false
+            }]
         }
     }
 }

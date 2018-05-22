@@ -120,7 +120,6 @@ class Client extends Controller implements Controller_Interface
             $this->cache->put('core', 'config_index', $cachehash, array($this->config_index,$this->subconfig_index,filemtime($index_file)), false, false, true);
         }
 
-
         // disabled
         if (!$this->env->is_optimization()) {
             return;
@@ -170,7 +169,19 @@ class Client extends Controller implements Controller_Interface
      */
     final public function footer()
     {
-        print '<script data-o10n>o10n.f();</script>';
+        // print at footer position
+        if (isset($this->at['footer']) && !empty($this->at['footer'])) {
+            print implode('', $this->at['footer']);
+        }
+
+        if (!empty($this->loaded_modules)) {
+            print '<script data-o10n>o10n.f();</script>';
+        }
+
+        // print after footer position
+        if (isset($this->after['footer']) && !empty($this->after['footer'])) {
+            print implode('', $this->after['footer']);
+        }
     }
 
     /**
@@ -342,13 +353,25 @@ class Client extends Controller implements Controller_Interface
         // enable config extension
         do_action('o10n_client_config');
 
+        return $this->parse_config($this->loaded_config);
+    }
+
+    /**
+     * Return client config parameter
+     */
+    final public function parse_config($config)
+    {
+
+        // enable config extension
+        do_action('o10n_client_config');
+
         // sort config by key
-        ksort($this->loaded_config);
+        ksort($config);
 
         // construct config parameter
         $config_param = array();
         $n = 0;
-        foreach ($this->loaded_config as $index => $subconfig) {
+        foreach ($config as $index => $subconfig) {
             
             // sort config by key
             ksort($subconfig);
@@ -400,8 +423,12 @@ class Client extends Controller implements Controller_Interface
      * @param string $key   Config key
      * @param mixed  $value Config value
      */
-    final public function set_config($key, $subkey, $value)
+    final public function set_config($key, $subkey, $value, $data = false)
     {
+        if ($data === false) {
+            $data = & $this->loaded_config;
+        }
+
         // config index key
         try {
             $config_index = $this->config_index($key);
@@ -410,11 +437,13 @@ class Client extends Controller implements Controller_Interface
             return false;
         }
 
-        if (!isset($this->loaded_config[$config_index])) {
-            $this->loaded_config[$config_index] = array();
+        if (!isset($data[$config_index])) {
+            $data[$config_index] = array();
         }
 
-        $this->loaded_config[$config_index][$subconfig_index] = $value;
+        $data[$config_index][$subconfig_index] = $value;
+
+        return $data;
     }
 
     /**

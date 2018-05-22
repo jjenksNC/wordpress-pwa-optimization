@@ -18,6 +18,7 @@ class Url extends Controller implements Controller_Interface
 
     private $root_path; // root WordPress path
     private $nowww_serverhost; // server host without www
+    private $request_url;
 
     /**
      * Load controller
@@ -131,6 +132,14 @@ class Url extends Controller implements Controller_Interface
      */
     final public function is_local($url, $returnPath = false, $checkFileExists = true)
     {
+        // normalize
+        if (strpos($url, '//') === 0) {
+            if ($this->env->is_ssl()) {
+                $url = "https:" . $url;
+            } else {
+                $url = "http:" . $url;
+            }
+        }
 
         // nowww host
         if (!isset($this->nowww_serverhost)) {
@@ -211,12 +220,83 @@ class Url extends Controller implements Controller_Interface
     }
 
     /**
+     * Detect if URL is local path
+     *
+     * @param  string  $url             URL to verify
+     * @param  bool    $returnPath      Return file path.
+     * @param  bool    $checkFileExists Check if file exists
+     * @return boolean Local URL
+     */
+    final public function is_local_host($url)
+    {
+
+        // nowww host
+        if (!isset($this->nowww_serverhost)) {
+            $this->nowww_serverhost = $this->nowww($_SERVER['HTTP_HOST']);
+        }
+
+        // normalize
+        if (strpos($url, '//') === 0) {
+            if ($this->env->is_ssl()) {
+                $url = "https:" . $url;
+            } else {
+                $url = "http:" . $url;
+            }
+        }
+
+        // http(s):// based file, match host with server host
+        if (strpos($url, '://') === false) {
+            if ($this->env->is_ssl()) {
+                $prefix = "https://";
+            } else {
+                $prefix = "http://";
+            }
+            $prefix .= $this->get_host();
+            if (substr($url, 0, 1) !== '/') {
+                $url = '/' . $url;
+            }
+            $url = $prefix . $url;
+        }
+
+        $prefix_match = substr($url, 0, 6);
+        if ($prefix_match === 'https:') {
+            
+            // HTTPS
+            $http_prefix = 'https://';
+        } elseif ($prefix_match === 'http:/') {
+
+            // HTTPS
+            $http_prefix = 'http://';
+        } else {
+
+            // invalid protocol
+            return false;
+        }
+
+        // parse url
+        $parsed_url = parse_url($url);
+
+        // match against server host
+        if ($this->nowww($parsed_url['host']) === $this->nowww_serverhost) {
+
+            // local file
+            $url = str_ireplace($http_prefix . $parsed_url['host'], '', $url);
+
+            // return host name
+            return $url;
+        }
+
+        // remote
+        return false;
+    }
+
+    /**
      * Apply CDN to url
      */
     final public function cdn($url, $cdnConfig = false)
     {
         // detect if local URL
-        $path = $this->is_local($url, true);
+        $path = $this->is_local_host($url);
         if (!$path) {
             return $url;
         }
@@ -278,6 +358,10 @@ class Url extends Controller implements Controller_Interface
      */
     final public function request()
     {
+        if (isset($this->request_url)) {
+            return $this->request_url;
+        }
+
         $ssl = (! empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on');
         $sp = strtolower($_SERVER['SERVER_PROTOCOL']);
         $protocol = substr($sp, 0, strpos($sp, '/')) . (($ssl) ? 's' : '');
@@ -285,9 +369,9 @@ class Url extends Controller implements Controller_Interface
         $port = ((! $ssl && $port == '80') || ($ssl && $port == '443')) ? '' : ':'.$port;
         $host = $this->get_host() . $port;
 
-        $url = $protocol . '://' . $host . $_SERVER['REQUEST_URI'];
+        $this->request_url = $protocol . '://' . $host . $_SERVER['REQUEST_URI'];
 
-        return $url; // return URL
+        return $this->request_url; // return URL
     }
 
     /**

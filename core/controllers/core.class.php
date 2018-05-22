@@ -33,6 +33,7 @@ class Core
             'db',
             'cache',
             'url',
+            'regex',
             'options',
             'install',
             'shutdown',
