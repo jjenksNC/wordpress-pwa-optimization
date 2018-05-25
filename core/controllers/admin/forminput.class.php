@@ -332,5 +332,8 @@ class AdminForminput extends Controller implements Controller_Interface
 
         // store options
         $this->AdminOptions->save($this->verified_input);
+
+        // hook after saving options
+        do_action('o10n_forminput_saved', $this->verified_input);
     }
 }

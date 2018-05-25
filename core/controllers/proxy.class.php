@@ -241,7 +241,7 @@ class Proxy extends Controller implements Controller_Interface
             $cacheFile = $this->cache->path($cacheStore, 'proxy', $cacheHash);
 
             // verify if proxy cache exists
-            if ($cacheFile) {
+            if ($cacheFile && file_exists($cacheFile)) {
                 $meta = $this->cache->meta($cacheStore, 'proxy', $cacheHash, true);
                 $update_interval = (isset($meta[3]) && is_numeric($meta[3]) && $meta[3] > 0) ? $meta[3] : 3600; // expire header
 

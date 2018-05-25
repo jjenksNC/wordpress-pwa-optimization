@@ -31,12 +31,113 @@
                     "title": "Cache policy options",
                     "type": "array",
                     "items": {
-                        "$ref": "filecache.json#/definitions/policy"
+                        "$ref": "filecache.json#/definitions/cachePolicy"
                     },
                     "uniqueItems": true
                 }
             },
             "required": ["enabled", "type"],
+            "additionalProperties": false
+        },
+        "bypass": {
+            "title": "Page Cache Bypass Policy FIlter",
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "title": "File page bypass cache policy",
+                    "type": "boolean",
+                    "default": false
+                },
+                "config": {
+                    "title": "Cache policy options",
+                    "type": "array",
+                    "items": {
+                        "$ref": "filecache.json#/definitions/bypassPolicy"
+                    },
+                    "uniqueItems": true
+                }
+            },
+            "required": ["enabled"],
+            "additionalProperties": false
+        },
+        "headers": {
+            "title": "Page Cache HTTP Headers Policy FIlter",
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "title": "File page cache HTTP headers policy",
+                    "type": "boolean",
+                    "default": false
+                },
+                "timing": {
+                    "title": "Add X-O10n-Cache header with performance timing.",
+                    "type": "boolean",
+                    "default": false
+                },
+                "type": {
+                    "title": "Default include/exclude",
+                    "type": "string",
+                    "enum": [
+                        "include",
+                        "exclude"
+                    ],
+                    "default": "include"
+                },
+                "config": {
+                    "title": "Cache policy options",
+                    "type": "array",
+                    "items": {
+                        "$ref": "filecache.json#/definitions/headerPolicy"
+                    },
+                    "uniqueItems": true
+                }
+            },
+            "required": ["enabled", "type"],
+            "additionalProperties": false
+        },
+        "stale": {
+            "title": "Serve expired cache when updating in background",
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "title": "Stale cache on update",
+                    "type": "boolean",
+                    "default": false
+                },
+                "max_age": {
+                    "oneOf": [{
+                        "type": "string",
+                        "enum": [""]
+                    }, {
+                        "title": "Maximum stale age",
+                        "type": "number",
+                        "minimum": 1,
+                        "default": 86400
+                    }]
+                }
+            },
+            "required": ["enabled"],
+            "additionalProperties": false
+        },
+        "hash": {
+            "title": "Page Cache Custom Hash",
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "title": "File page cache hash",
+                    "type": "boolean",
+                    "default": false
+                },
+                "config": {
+                    "title": "Cache hash options",
+                    "type": "array",
+                    "items": {
+                        "$ref": "filecache.json#/definitions/cacheHash"
+                    },
+                    "uniqueItems": true
+                }
+            },
+            "required": ["enabled"],
             "additionalProperties": false
         },
         "expire": {
@@ -75,7 +176,7 @@
                             "title": "Cache policy options",
                             "type": "array",
                             "items": {
-                                "$ref": "filecache.json#/definitions/policy"
+                                "$ref": "filecache.json#/definitions/cachePolicy"
                             },
                             "uniqueItems": true
                         }
@@ -144,7 +245,7 @@
     "additionalProperties": false,
 
     "definitions": {
-        "policy": {
+        "cachePolicy": {
             "oneOf": [{
                 "title": "A string to match a page URL.",
                 "type": "string",
@@ -163,8 +264,20 @@
                         "minLength": 1
                     },
                     "regex": {
-                        "type": "boolean",
-                        "enum": [true]
+                        "type": "boolean"
+                    },
+                    "bypass": {
+                        "type": "boolean"
+                    },
+                    "stale": {
+                        "oneOf": [{
+                            "type": "boolean"
+                        }, {
+                            "title": "Maximum stale age",
+                            "type": "number",
+                            "minimum": 1,
+                            "default": 86400
+                        }]
                     },
                     "expire": {
                         "title": "Expire time in seconds.",
@@ -262,14 +375,264 @@
                             "uniqueItems": true
                         }]
                     },
+                    "bypass": {
+                        "type": "boolean"
+                    },
+                    "stale": {
+                        "oneOf": [{
+                            "type": "boolean"
+                        }, {
+                            "title": "Maximum stale age",
+                            "type": "number",
+                            "minimum": 1,
+                            "default": 86400
+                        }]
+                    },
                     "expire": {
                         "title": "Expire time in seconds.",
                         "type": "number",
                         "minimum": 1,
                         "default": 86400
+                    },
+                    "hash": {
+                        "title": "Cache hash options",
+                        "type": "array",
+                        "items": {
+                            "$ref": "filecache.json#/definitions/cacheHash"
+                        },
+                        "uniqueItems": true
                     }
                 },
                 "required": ["match", "method"],
+                "additionalProperties": false
+            }]
+        },
+        "bypassPolicy": {
+            "oneOf": [{
+                "title": "A string to match a page URL.",
+                "type": "string",
+                "minLength": 1
+            }, {
+                "title": "Filter config object",
+                "type": "object",
+                "properties": {
+                    "match": {
+                        "type": "string",
+                        "enum": ["uri"]
+                    },
+                    "string": {
+                        "title": "A string to match a page URL.",
+                        "type": "string",
+                        "minLength": 1
+                    },
+                    "regex": {
+                        "type": "boolean"
+                    }
+                },
+                "required": ["match", "string"],
+                "additionalProperties": false
+            }, {
+                "title": "Filter config object",
+                "type": "object",
+                "properties": {
+                    "match": {
+                        "type": "string",
+                        "enum": ["condition"]
+                    },
+                    "method": {
+                        "title": "The method to call.",
+                        "type": "string",
+                        "pattern": "^([\\A-Za-z0-9_-]+::)?[A-Za-z0-9_-]+$"
+                    },
+                    "arguments": {
+                        "title": "Arguments to apply to the method.",
+                        "default": "null",
+                        "oneOf": [{
+                            "type": "null"
+                        }, {
+                            "type": "array",
+                            "minItems": 1,
+                            "items": {
+                                "oneOf": [{
+                                    "type": "null"
+                                }, {
+                                    "type": "boolean"
+                                }, {
+                                    "type": "integer",
+                                    "minimum": 1
+                                }, {
+                                    "type": "string",
+                                    "minLength": 1
+                                }, {
+                                    "type": "array",
+                                    "minItems": 1,
+                                    "items": {
+                                        "oneOf": [{
+                                            "type": "null"
+                                        }, {
+                                            "type": "boolean"
+                                        }, {
+                                            "type": "integer",
+                                            "minimum": 1
+                                        }, {
+                                            "type": "string",
+                                            "minLength": 1
+                                        }, {
+                                            "type": "array",
+                                            "minItems": 1,
+                                            "items": {
+                                                "oneOf": [{
+                                                    "type": "integer",
+                                                    "minimum": 1
+                                                }, {
+                                                    "type": "string",
+                                                    "minLength": 1
+                                                }]
+                                            },
+                                            "uniqueItems": true
+                                        }]
+                                    }
+                                }]
+                            }
+                        }]
+                    },
+                    "result": {
+                        "title": "The method result to match.",
+                        "oneOf": [{
+                            "type": "boolean",
+                            "default": true
+                        }, {
+                            "type": "integer"
+                        }, {
+                            "type": "string"
+                        }, {
+                            "title": "Match against an array.",
+                            "type": "array",
+                            "minItems": 1,
+                            "items": {
+                                "oneOf": [{
+                                    "type": "integer"
+                                }, {
+                                    "type": "string"
+                                }]
+                            },
+                            "uniqueItems": true
+                        }]
+                    }
+                },
+                "required": ["match", "method"],
+                "additionalProperties": false
+            }]
+        },
+        "headerPolicy": {
+            "oneOf": [{
+                "title": "A string to match a header key or value.",
+                "type": "string",
+                "minLength": 1
+            }, {
+                "title": "Filter config object",
+                "type": "object",
+                "properties": {
+                    "match": {
+                        "title": "A string to match a header key or value.",
+                        "type": "string",
+                        "minLength": 1
+                    },
+                    "regex": {
+                        "type": "boolean"
+                    },
+                    "remove": {
+                        "type": "boolean"
+                    }
+                },
+                "required": ["match"],
+                "additionalProperties": false
+            }, {
+                "title": "Add header config object",
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "title": "Header key",
+                        "type": "string",
+                        "minLength": 1
+                    },
+                    "value": {
+                        "title": "Header value",
+                        "type": "string"
+                    }
+                },
+                "required": ["key", "value"],
+                "additionalProperties": false
+            }]
+        },
+        "cacheHash": {
+            "oneOf": [{
+                "title": "A hash variable.",
+                "type": "string",
+                "enum": ["request_uri", "request_url", "hostname", "host", "port", "ssl", "protocol"]
+            }, {
+                "title": "A hash method",
+                "type": "object",
+                "properties": {
+                    "method": {
+                        "title": "The method to call.",
+                        "type": "string",
+                        "pattern": "^([\\A-Za-z0-9_-]+::)?[A-Za-z0-9_-]+$"
+                    },
+                    "arguments": {
+                        "title": "Arguments to apply to the method.",
+                        "default": "null",
+                        "oneOf": [{
+                            "type": "null"
+                        }, {
+                            "type": "array",
+                            "minItems": 1,
+                            "items": {
+                                "oneOf": [{
+                                    "type": "null"
+                                }, {
+                                    "type": "boolean"
+                                }, {
+                                    "type": "integer",
+                                    "minimum": 1
+                                }, {
+                                    "type": "string",
+                                    "minLength": 1
+                                }, {
+                                    "type": "array",
+                                    "minItems": 1,
+                                    "items": {
+                                        "oneOf": [{
+                                            "type": "null"
+                                        }, {
+                                            "type": "boolean"
+                                        }, {
+                                            "type": "integer",
+                                            "minimum": 1
+                                        }, {
+                                            "type": "string",
+                                            "minLength": 1
+                                        }, {
+                                            "type": "array",
+                                            "minItems": 1,
+                                            "items": {
+                                                "oneOf": [{
+                                                    "type": "integer",
+                                                    "minimum": 1
+                                                }, {
+                                                    "type": "string",
+                                                    "minLength": 1
+                                                }]
+                                            },
+                                            "uniqueItems": true
+                                        }]
+                                    }
+                                }]
+                            }
+                        }]
+                    }
+                },
+                "required": ["method"],
                 "additionalProperties": false
             }]
         }

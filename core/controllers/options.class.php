@@ -53,7 +53,7 @@ class Options extends Controller implements Controller_Interface
      * @param  string $Default Default value for non existing options.
      * @return mixed  Option data.
      */
-    final public function get($key = false, $default = null)
+    final public function get($key = false, $default = null, $multi_full_path = false)
     {
         // return all options
         if (!$key) {
@@ -77,7 +77,8 @@ class Options extends Controller implements Controller_Interface
             $result = array();
             foreach ($keys as $key) {
                 if (isset($this->data[$key])) {
-                    $result[str_replace($parent_key.'.', '', $key)] = $this->data[$key];
+                    $pathkey = ($multi_full_path) ? $key : str_replace($parent_key.'.', '', $key);
+                    $result[$pathkey] = $this->data[$key];
                 }
             }
 
