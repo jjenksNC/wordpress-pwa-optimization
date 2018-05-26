@@ -134,7 +134,8 @@ foreach ($tabs as $tabkey => $tabinfo) {
             } else {
                 $url = add_query_arg($params, admin_url((isset($tabinfo['base'])) ? $tabinfo['base'] : $admin_base));
             }
-            echo '<a class="nav-tab'.$class.'" href="'.esc_attr($url).'">'.$tabinfo['title'].'</a>';
+ 
+            echo '<a class="nav-tab'.$class.'" href="'.esc_attr($url).'"'.(isset($tabinfo['attrs']) ? ' ' . $tabinfo['attrs'] : '').'>'.$tabinfo['title'].'</a>';
         }
 
         print '</nav>';
