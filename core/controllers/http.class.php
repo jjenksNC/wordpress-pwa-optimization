@@ -170,7 +170,7 @@ final class HTTPException extends \Exception
      */
     public function __construct($message, $error_code, $status, $response, $request_type)
     {
-        $this->http_status = $http_status; // HTTP status
+        $this->http_status = $status; // HTTP status
         $this->http_response = $response; // HTTP status
         $this->request_type = $request_type; // HTTP request type
         

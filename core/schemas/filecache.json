@@ -140,6 +140,179 @@
             "required": ["enabled"],
             "additionalProperties": false
         },
+        "preload": {
+            "title": "Page Cache preload processor",
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "title": "Enable preload processor",
+                    "type": "boolean",
+                    "default": false
+                },
+                "start": {
+                    "title": "Add X-O10n-Cache header with performance timing.",
+                    "type": "string",
+                    "pattern": "^([0-9]{2}:[0-9]{2})$",
+                    "default": "04:00"
+                },
+                "interval": {
+                    "title": "Default include/exclude",
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "title": "Enable preload processor",
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "interval": {
+                            "title": "Preload processor start interval",
+                            "oneOf": [{
+                                "type": "null"
+                            }, {
+                                "type": "string",
+                                "enum": [""]
+                            }, {
+                                "type": "integer",
+                                "minimum": 1
+                            }]
+                        }
+                    },
+                    "required": ["enabled"],
+                    "additionalProperties": false
+                },
+                "http_interval": {
+                    "title": "HTTP request interval",
+                    "oneOf": [{
+                        "type": "boolean",
+                        "enum": [false]
+                    }, {
+                        "type": "null"
+                    }, {
+                        "type": "string",
+                        "enum": [""]
+                    }, {
+                        "type": "integer",
+                        "minimum": 1,
+                        "default": 500
+                    }]
+                },
+                "query": {
+                    "title": "Preload query configuration",
+                    "type": "array",
+                    "items": {
+                        "oneOf": [{
+                            "title": "Filter config object",
+                            "type": "object",
+                            "properties": {
+                                "url": {
+                                    "title": "A string to match a page URL.",
+                                    "type": "string",
+                                    "minLength": 1
+                                },
+                                "priority": {
+                                    "type": "integer",
+                                    "minimum": 1
+                                },
+                                "force_update": {
+                                    "type": "boolean"
+                                },
+                                "wp_http": {
+                                    "type": "object"
+                                },
+                                "headers": {
+                                    "type": "object"
+                                },
+                                "http_interval": {
+                                    "title": "HTTP request interval",
+                                    "oneOf": [{
+                                        "type": "boolean",
+                                        "enum": [false]
+                                    }, {
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "default": 500
+                                    }]
+                                }
+                            },
+                            "required": ["url"],
+                            "additionalProperties": false
+                        }, {
+                            "title": "Preload query config object",
+                            "type": "object",
+                            "properties": {
+                                "method": {
+                                    "title": "The method to call.",
+                                    "type": "string",
+                                    "pattern": "^([\\A-Za-z0-9_-]+::)?[A-Za-z0-9_-]+$"
+                                },
+                                "link_method": {
+                                    "title": "The method to call to retrieve the link URL.",
+                                    "type": "string",
+                                    "pattern": "^([\\A-Za-z0-9_-]+::)?[A-Za-z0-9_-]+$"
+                                },
+                                "arguments": {
+                                    "title": "Arguments to apply to the method.",
+                                    "default": "null",
+                                    "oneOf": [{
+                                        "type": "null"
+                                    }, {
+                                        "type": "array",
+                                        "minItems": 1,
+                                        "items": {
+                                            "oneOf": [{
+                                                "type": "null"
+                                            }, {
+                                                "type": "boolean"
+                                            }, {
+                                                "type": "integer",
+                                                "minimum": 1
+                                            }, {
+                                                "type": "string",
+                                                "minLength": 1
+                                            }, {
+                                                "type": "array",
+                                                "minItems": 1
+                                            }, {
+                                                "type": "object"
+                                            }]
+                                        }
+                                    }]
+                                },
+                                "priority": {
+                                    "type": "integer",
+                                    "minimum": 1
+                                },
+                                "force_update": {
+                                    "type": "boolean"
+                                },
+                                "wp_http": {
+                                    "type": "object"
+                                },
+                                "headers": {
+                                    "type": "object"
+                                },
+                                "http_interval": {
+                                    "title": "HTTP request interval",
+                                    "oneOf": [{
+                                        "type": "boolean",
+                                        "enum": [false]
+                                    }, {
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "default": 500
+                                    }]
+                                }
+                            },
+                            "required": ["method", "link_method"],
+                            "additionalProperties": false
+                        }]
+                    },
+                    "uniqueItems": true
+                }
+            },
+            "required": ["enabled"],
+            "additionalProperties": false
+        },
         "expire": {
             "title": "Expire time in seconds.",
             "type": "number",
