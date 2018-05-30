@@ -99,7 +99,7 @@ class Pwa extends Controller implements Controller_Interface
         $scope = $this->options->get('pwa.scope');
         $this->sw_scope = apply_filters('o10n_sw_scope', (($scope) ? $scope : $url_path));
 
-        if ($this->options->bool('pwa.enabled') && $this->env->is_optimization()) {
+        if ($this->options->bool('pwa.enabled') && $this->env->enabled('pwa')) {
             $this->client->load_module('pwa', O10N_CORE_VERSION, $this->core->modules('pwa')->dir_path());
 
             // client config
@@ -142,7 +142,7 @@ class Pwa extends Controller implements Controller_Interface
         }
 
 
-        if (!$this->env->is_optimization()) {
+        if (!$this->env->enabled('pwa')) {
             return;
         }
 
@@ -158,7 +158,7 @@ class Pwa extends Controller implements Controller_Interface
      */
     final public function header()
     {
-        if (!$this->env->is_optimization()) {
+        if (!$this->env->enabled('pwa')) {
             return;
         }
         

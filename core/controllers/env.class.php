@@ -15,12 +15,12 @@ if (!defined('ABSPATH')) {
 class Env extends Controller implements Controller_Interface
 {
     private $debug_enabled = null; // optimization debug mode
-    private $optimization_enabled = null; // apply optimization flag
 
     private $template_redirect_completed = false;
 
     private $is_ssl = null;
 
+    private $enabled = null;
     private $disabled = false;
 
     /**
@@ -77,63 +77,102 @@ class Env extends Controller implements Controller_Interface
         // set debug flag
         $this->is_debug(true);
 
-        // set optimization flag
-        $this->is_optimization(true);
+        // update enabled flag
+        $this->enabled(array_keys($this->core->modules()), false, true);
     }
 
     /**
-     * Apply optimization?
+     * Return enabled state
+     *
+     * @param  string|array $modules   Modules to verify
+     * @param  bool         $use_cache Use cached enabled state
+     * @return bool         Enabled state
+     */
+    final public function enabled($modules = false, $use_cache = true)
+    {
+
+        // disabled by filters
+        if ($use_cache && $this->enabled === false) {
+            return false;
+        }
+
+        if (!$use_cache || is_null($this->enabled)) {
+
+            // global disabled
+            if (defined('O10N_DISABLED') && O10N_DISABLED) {
+                return $this->enabled = false;
+            }
+
+            // disabled by method
+            if ($this->disabled) {
+                return $this->enabled = false;
+            }
+            
+            // disabled by filter
+            $disabled = apply_filters('o10n_disabled', false);
+            if ($disabled === true) {
+                return $this->enabled = false;
+            }
+
+            // verify constants
+            if (
+                // disable for ajax / post requests
+                defined('DOING_AJAX')
+                || defined('WP_ADMIN')
+                || defined('XMLRPC_REQUEST')
+                || defined('DOING_CRON')
+                || defined('APP_REQUEST')
+                || (defined('SHORTINIT') && SHORTINIT)
+            ) {
+                return $this->enabled = false;
+            }
+
+            // WordPress methods
+            if (
+                // admin area
+                is_admin()
+
+                // feed
+                || ($this->template_redirect_completed && function_exists('is_feed') && is_feed())
+
+                || ($GLOBALS['pagenow'] === 'wp-login.php')
+            ) {
+                return $this->enabled = false;
+            }
+        }
+
+        $this->enabled = true;
+
+        // convert single module check to array
+        if ($modules && is_string($modules)) {
+            $modules = array($modules);
+        }
+
+        // verify module state
+        if ($modules && !empty($modules)) {
+            foreach ($modules as $module) {
+
+                // get module controller
+                $module_ctrl = $this->core->modules($module);
+                if ($module_ctrl && !$module_ctrl->enabled($use_cache)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Return optimization enabled state
+     *
+     * @todo remove (old method)
      *
      * @return bool true/false
      */
     final public function is_optimization($reset = false)
     {
-        if (defined('O10N_DISABLED') && O10N_DISABLED) {
-            return false;
-        }
-
-        if ($this->disabled) {
-            return false;
-        }
-
-        // return cached result
-        if (!$reset && !is_null($this->optimization_enabled)) {
-            return $this->optimization_enabled;
-        }
-        
-        // disabled by filter
-        $disabled = apply_filters('o10n_disabled', false);
-        if ($disabled === true) {
-            return $this->optimization_enabled = false;
-        }
-
-        // verify constants
-        if (
-            // disable for ajax / post requests
-            defined('DOING_AJAX')
-            || defined('WP_ADMIN')
-            || defined('XMLRPC_REQUEST')
-            || defined('DOING_CRON')
-            || defined('APP_REQUEST')
-            || (defined('SHORTINIT') && SHORTINIT)
-        ) {
-            return $this->optimization_enabled = false;
-        }
-
-        // WordPress methods
-        if (
-            // admin area
-            is_admin()
-
-            // feed
-            || ($this->template_redirect_completed && function_exists('is_feed') && is_feed())
-
-            || ($GLOBALS['pagenow'] === 'wp-login.php')
-        ) {
-            return $this->optimization_enabled = false;
-        }
-
-        return $this->optimization_enabled = true;
+        return $this->enabled($false, !$reset);
     }
 
     /**
@@ -194,8 +233,24 @@ class Env extends Controller implements Controller_Interface
     /**
      * Disable optimization
      */
-    final public function disable($state = true)
+    final public function disable($state = true, $modules = false)
     {
+        if ($modules) {
+            if (is_string($modules)) {
+                $modules = array($modules);
+                foreach ($modules as $module) {
+
+                    // get module controller
+                    $module_ctrl = $this->core->modules($module);
+                    if ($module_ctrl) {
+                        $module_ctrl->disable($state);
+                    }
+                }
+            }
+
+            return;
+        }
+
         $this->disabled = $state;
     }
 }

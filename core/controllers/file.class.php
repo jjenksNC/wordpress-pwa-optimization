@@ -103,17 +103,16 @@ class File extends Controller implements Controller_Interface
         }
 
         if (!is_dir($path)) {
-            @mkdir($path, $mode, $recursive);
-        }
-        if (is_dir($path)) {
+            if (!@mkdir($path, $mode, $recursive)) {
+                $error = error_get_last();
+                throw new \Exception('Failed to create directory ' . $this->safe_path($path) . (($error) ? ' Error: ' . $error['message'] : ' Error: unknown'));
+            }
 
             // set permissions
             @chmod($path, $mode);
-
-            return true;
         }
 
-        throw new \Exception('Failed to create directory ' . $this->safe_path($path));
+        return true;
     }
 
     /**

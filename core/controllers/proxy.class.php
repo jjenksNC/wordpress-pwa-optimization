@@ -55,7 +55,7 @@ class Proxy extends Controller implements Controller_Interface
     {
 
         // optimization enabled?
-        if (!$this->env->is_optimization()) {
+        if (!$this->env->enabled()) {
             return;
         }
 

@@ -37,7 +37,8 @@ final class Module implements Module_Interface
     private $cache_stores;
 
     // disable module
-    private $disabled = false;
+    private $enabled = null;
+    private $disabled = null;
 
     /**
      * Load module
@@ -159,7 +160,7 @@ final class Module implements Module_Interface
 
         // verify core version
         if (version_compare(O10N_CORE_VERSION, $this->minimum_core_version, '<')) {
-            $this->disabled = true;
+            $this->enabled = false;
 
             // add admin notice
             add_action('admin_notices', create_function('', "echo '<div class=\"error\"><h1>".__($this->module_name . ' requires O10N Core version '.$this->minimum_core_version.' (loaded: '.O10N_CORE_VERSION.').</h1><p>'.$this->module_name.' is a module of a performance optimization package that uses the minimum amount of resources when used stand alone together with other stand alone optimization modules by sharing a single optimization core. This requires maintenance of a base level core version when using multiple optimization modules independently.</p><p><strong>Please upgrade optimization plugins with a core version lower than '.$this->minimum_core_version.'.</strong></p>', 'o10n') ."</h1></div>';"), (PHP_INT_MAX * -1));
@@ -181,7 +182,7 @@ final class Module implements Module_Interface
     final public function controllers($is_admin, $is_logged_in)
     {
         // disabled
-        if ($this->disabled) {
+        if (!$this->enabled(true, false)) {
             return;
         }
 
@@ -209,7 +210,7 @@ final class Module implements Module_Interface
     final public function cache_store_index()
     {
         // disabled
-        if ($this->disabled) {
+        if (!$this->enabled(true, false)) {
             return;
         }
 
@@ -222,7 +223,7 @@ final class Module implements Module_Interface
     final public function cache_stores()
     {
         // disabled
-        if ($this->disabled) {
+        if (!$this->enabled(true, false)) {
             return;
         }
 
@@ -237,7 +238,7 @@ final class Module implements Module_Interface
     final public function admin_view_directory()
     {
         // disabled
-        if ($this->disabled) {
+        if (!$this->enabled(true, false)) {
             return;
         }
 
@@ -261,6 +262,60 @@ final class Module implements Module_Interface
     }
 
     /**
+     * Enable/disable plugin
+     *
+     * @param bool $state Enabled state
+     */
+    final public function disable($state)
+    {
+        $this->disabled = ($state) ? true : false;
+    }
+
+    /**
+     * Return module enabled state
+     *
+     * @param bool $internal Internal check
+     */
+    final public function enabled($use_cache = true, $store_cache = true)
+    {
+        if ($use_cache && !is_null($this->enabled)) {
+            return $this->enabled;
+        }
+
+        // disabled by method
+        if (!is_null($this->disabled) && $this->disabled) {
+            return $this->enabled = false;
+        }
+
+        // module definition name
+        $module_key_defenition = strtoupper(str_replace('-', '_', $this->module_key));
+        if (defined('O10N_DISABLED_' . $module_key_defenition) && constant('O10N_DISABLED_' . $module_key_defenition)) {
+            if (!$store_cache) {
+                return false;
+            }
+
+            return $this->enabled = false;
+        }
+
+        // apply filter
+        $module_filter_name = strtolower(str_replace('-', '_', $this->module_key));
+        $disabled = apply_filters('o10n_disabled_' . $module_filter_name, false);
+        if ($disabled === true) {
+            if (!$store_cache) {
+                return false;
+            }
+
+            return $this->enabled = false;
+        }
+
+        if (!$store_cache) {
+            return true;
+        }
+
+        return $this->enabled = true;
+    }
+
+    /**
      * Autoload controller dependencies
      *
      * @param  string $class_name           Class name without namespace
@@ -271,7 +326,7 @@ final class Module implements Module_Interface
     final public function autoload($class_name, $class_name_lowercase, $ns_class_name)
     {
         // disabled
-        if ($this->disabled) {
+        if (!$this->enabled(true, false)) {
             return;
         }
 

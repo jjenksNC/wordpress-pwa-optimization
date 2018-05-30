@@ -121,7 +121,7 @@ class Client extends Controller implements Controller_Interface
         }
 
         // disabled
-        if (!$this->env->is_optimization()) {
+        if (!$this->env->enabled()) {
             return;
         }
 

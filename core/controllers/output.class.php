@@ -42,7 +42,7 @@ class Output extends Controller implements Controller_Interface
     protected function setup()
     {
         // disabled
-        if (!$this->env->is_optimization() || is_admin()) {
+        if (!$this->env->enabled() || is_admin()) {
             return;
         }
 
@@ -56,7 +56,7 @@ class Output extends Controller implements Controller_Interface
     final public function ob_start()
     {
         // disabled
-        if (!$this->env->is_optimization()) {
+        if (!$this->env->enabled()) {
             return;
         }
 
@@ -73,7 +73,7 @@ class Output extends Controller implements Controller_Interface
     final public function process_buffer($buffer)
     {
         // disabled
-        if (!$this->env->is_optimization()) {
+        if (!$this->env->enabled()) {
             return $buffer;
         }
 

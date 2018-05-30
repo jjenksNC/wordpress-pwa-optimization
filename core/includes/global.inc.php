@@ -16,9 +16,9 @@ function search_replace($search, $replace, $regex = false)
 }
 
 // Disable optimization
-function disable($state = true)
+function disable($state = true, $modules = false)
 {
-    Core::get('env')->disable($state);
+    Core::get('env')->disable($state, $modules);
 }
 
 
