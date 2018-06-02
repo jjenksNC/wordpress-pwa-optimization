@@ -13,6 +13,22 @@ Advanced Progressive Web App (PWA) and Service Worker optimization toolkit. Cach
 
 This plugin can be installed and updated using [Github Updater](https://github.com/afragen/github-updater) ([installation instructions](https://github.com/afragen/github-updater/wiki/Installation))
 
+<details/>
+  <summary>Installation instructions</summary>
+
+### Step 1: Install Github Updater and first optimization plugin
+
+Installing and updating the plugins is possible using Github Updater. It is easy to install one of the plugins. You simply need to download the Github Updater plugin ([zip file](https://github.com/afragen/github-updater/archive/develop.zip)), install it from the WordPress plugin admin panel and copy the Github URL of the plugin into the Github Updater installer.
+
+![image](https://user-images.githubusercontent.com/8843669/39889846-46158cc2-5499-11e8-824d-720020f758db.png)
+
+### Step 2: Install other optimization plugins with a single click
+
+A recent update of all plugins contains a easy single click install button.
+
+![image](https://user-images.githubusercontent.com/8843669/39661507-cc1eac5e-5052-11e8-8fba-33c0cc959b07.png)
+</details>
+
 ## WordPress WPO Collection
 
 This plugin is part of a Website Performance Optimization collection that include [CSS](https://github.com/o10n-x/wordpress-css-optimization), [Javascript)](https://github.com/o10n-x/wordpress-javascript-optimization), [HTML](https://github.com/o10n-x/wordpress-html-optimization), [Web Font](https://github.com/o10n-x/wordpress-font-optimization), [HTTP/2](https://github.com/o10n-x/wordpress-http2-optimization) and [Security Header](https://github.com/o10n-x/wordpress-security-header-optimization) optimization. 
