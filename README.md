@@ -7,9 +7,6 @@ Advanced Progressive Web App (PWA) and Service Worker optimization toolkit. Cach
 * [Documentation](https://github.com/o10n-x/wordpress-pwa-optimization/tree/master/docs)
 * [Description](https://github.com/o10n-x/wordpress-pwa-optimization#description)
 * [Version history (Changelog)](https://github.com/o10n-x/wordpress-pwa-optimization/releases)
-
-**This plugin is removed from WordPress.org. Read the story [here](https://github.com/o10n-x/wordpress-css-optimization/issues/4).**
-
 ## Installation
 
 ![Github Updater](https://github.com/afragen/github-updater/raw/develop/assets/GitHub_Updater_logo_small.png)
