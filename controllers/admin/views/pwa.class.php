@@ -34,7 +34,8 @@ class AdminViewPwa extends AdminViewBase
             'json',
             'file',
             'pwa',
-            'AdminClient'
+            'AdminClient',
+            'AdminPwa'
         ));
     }
     
@@ -52,14 +53,7 @@ class AdminViewPwa extends AdminViewBase
      */
     final public function help_tab()
     {
-        $data = array(
-            'name' => __('PWA Optimization', 'o10n'),
-            'github' => 'https://github.com/o10n-x/wordpress-pwa-optimization',
-            'wordpress' => 'https://wordpress.org/support/plugin/pwa-optimization',
-            'docs' => 'https://github.com/o10n-x/wordpress-pwa-optimization/tree/master/docs'
-        );
-
-        return $data;
+        return $this->AdminPwa->help_tab();
     }
 
     /**
