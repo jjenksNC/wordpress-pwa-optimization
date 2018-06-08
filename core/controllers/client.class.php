@@ -261,7 +261,7 @@ class Client extends Controller implements Controller_Interface
             ksort($this->loaded_modules);
  
             // debug mode
-            $js_ext = (defined('O10N_DEBUG') && O10N_DEBUG) ? '.debug.js' : '.js';
+            $js_ext = ($this->env->is_debug()) ? '.debug.js' : '.js';
 
             // base client
             $o10n_client_base = O10N_CORE_PATH . 'public/js/o10n' . $js_ext;
@@ -299,6 +299,8 @@ class Client extends Controller implements Controller_Interface
                 foreach ($sources as $source) {
                     if (file_exists($source)) {
                         $iife_clients[$version] .= file_get_contents($source);
+                    } else {
+                        throw new Exception('Client source not found: ' . $this->file->safe_path($source), 'core', true);
                     }
                 }
                 $iife_clients[$version] .= '}();';
