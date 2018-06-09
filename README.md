@@ -7,6 +7,8 @@ Advanced Progressive Web App (PWA) and Service Worker optimization toolkit. Cach
 * [Documentation](https://github.com/o10n-x/wordpress-pwa-optimization/tree/master/docs)
 * [Description](https://github.com/o10n-x/wordpress-pwa-optimization#description)
 * [Version history (Changelog)](https://github.com/o10n-x/wordpress-pwa-optimization/releases)
+* [About WordPress WPO Collection](https://github.com/o10n-x/wordpress-pwa-optimization#wordpress-wpo-collection)
+
 ## Installation
 
 ![Github Updater](https://github.com/afragen/github-updater/raw/develop/assets/GitHub_Updater_logo_small.png)
@@ -28,6 +30,66 @@ A recent update of all plugins contains a easy single click install button.
 
 ![image](https://user-images.githubusercontent.com/8843669/39661507-cc1eac5e-5052-11e8-8fba-33c0cc959b07.png)
 </details>
+
+## Description
+
+This plugin is a toolkit for Progressive Web App and Service Worker optimization.
+
+The plugin provides in a complete solution for service worker based performance optimization and enables to validate a website as a Progressive Web App (PWA) in [Google Lighthouse](https://developers.google.com/web/tools/lighthouse/).
+
+The service worker can be configured with multiple cache strategies (cache first, network with fallback and event based), offline content, smart preloading, preload on mousedown to improve navigation speed and many more options to enable offline browsing and improved navigation performance.
+
+![Service Worker Optimization](https://github.com/o10n-x/wordpress-pwa-optimization/blob/master/docs/images/service-worker-optimization.png)
+![Service Worker Cache Policy Optimization](https://github.com/o10n-x/wordpress-pwa-optimization/blob/master/docs/images/service-worker-cache-policy.png)
+
+### Cache Policy
+
+The Service Worker cache policy can be configured using JSON.
+
+![Service Worker Cache Policy](https://github.com/o10n-x/wordpress-pwa-optimization/blob/master/docs/images/cache-policy.png)
+
+### Service Worker Push
+
+The plugin provides a unique innovation called **Service Worker Push**. It is an alternative for HTTP/2 Server Push + Cache-Digest with better performance and better efficiency.
+
+Cache-Digest is not yet an official supported feature. HTTP/2 Server Push without Cache-Digest causes a lot of overhead and has almost no performance advantage.
+
+- Performance study: https://calendar.perfplanet.com/2016/cache-digests-http2-server-push/
+- Google engineer: https://jakearchibald.com/2017/h2-push-tougher-than-i-thought/
+
+Cache-Digest calculation for thousands of assets causes overhead. Service Worker Push has direct access to the browser cache storage and is therefor able to support millions of cached assets without performance loss.
+
+Service Worker Push uses PHP method `\O10n\attach_preload()` to attach assets such as images, stylesheets and scripts to a page which are then exposed to a Service Worker using a HTTP header. The Service Worker is then able to preload assets intelligently on the basis of a page URL.
+
+```php
+/* Attach assets to page for smart preloading in the Service Worker */
+add_action('init', function() {
+
+    if (function_exists('O10n\attach_preload')) {
+
+        // attach single asset to page
+        \O10n\attach_preload('/path/to/image.jpg');
+
+        // attach multiple assets to page
+        \O10n\attach_preload(array('/path/to/image.jpg', 'https://cdn.google.com/script.js', '/path/to/stylesheet.css'));
+
+    }
+});
+```
+
+### Background Fetch
+
+A performance flaw of Service Workers is that they initiate Fetch requests that cannot be cancelled when a user wants to navigate which can slow and even block navigation. This plugin provides a unique innovation in which Fetch requests can be performed in a regular Web Worker that can be terminated when a user wants to navigate, instantly cancelling any Fetch requests or background tasks.
+
+![Background Fetch](https://github.com/o10n-x/wordpress-pwa-optimization/blob/master/docs/images/background-fetch.png)
+
+### Web App Manifest editor
+
+The plugin provides a Web App `manifest.json` and meta editor to easily optimize the web app configuration.
+
+![Web App Manifest Editor](https://github.com/o10n-x/wordpress-pwa-optimization/blob/master/docs/images/manifest-editor.png)
+
+Additional features can be requested on the [Github forum](https://github.com/o10n-x/wordpress-pwa-optimization/issues).
 
 ## WordPress WPO Collection
 
@@ -62,15 +124,3 @@ For SEO it is therefor simple: websites will need to meet the standards set by t
 A perfect Google Lighthouse Score includes validation of a website as a [Progressive Web App (PWA)](https://developers.google.com/web/progressive-web-apps/).
 
 Google offers another new website performance test that is much tougher than the Google PageSpeed score. It is based on a AI neural network and it can be accessed on https://testmysite.thinkwithgoogle.com
-
-## Description
-
-This plugin is a toolkit for Progressive Web App and Service Worker optimization.
-
-The plugin provides in a complete solution for service worker based performance optimization and enables to validate a website as a Progressive Web App (PWA) in [Google Lighthouse](https://developers.google.com/web/tools/lighthouse/).
-
-The service worker can be configured with multiple cache strategies (cache first, network with fallback and event based), offline content, smart preloading, preload on mousedown to improve navigation speed and many more options to enable offline browsing and improved navigation performance.
-
-The plugin provides a Web App `manifest.json` editor to easily optimize the web app configuration.
-
-Additional features can be requested on the [Github forum](https://github.com/o10n-x/wordpress-pwa-optimization/issues).
