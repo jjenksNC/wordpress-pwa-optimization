@@ -672,11 +672,23 @@ class Client extends Controller implements Controller_Interface
      */
     final public function print_exception($category, $error)
     {
-        $config_index = $this->config_index('global', 'exceptions');
+        $data = & $this->loaded_config;
 
-        if (!isset($this->loaded_config[$config_index])) {
-            $this->loaded_config[$config_index] = array();
+        // config index key
+        try {
+            $config_index = $this->config_index('global');
+            $subconfig_index = $this->config_index('global', 'exceptions');
+        } catch (Exception $err) {
+            return false;
         }
-        $this->loaded_config[$config_index][] = array($category,$error);
+
+        if (!isset($data[$config_index])) {
+            $data[$config_index] = array();
+        }
+
+        if (!isset($data[$config_index][$subconfig_index])) {
+            $data[$config_index][$subconfig_index] = array();
+        }
+        $data[$config_index][$subconfig_index][] = array($category,$error);
     }
 }

@@ -102,14 +102,21 @@ class File extends Controller implements Controller_Interface
             throw new \Exception('Failed to create directory ' . $this->safe_path($path) . ' (Invalid directory path)');
         }
 
-        if (!is_dir($path)) {
+        // check if directory exists
+        if (!file_exists($path)) {
             if (!@mkdir($path, $mode, $recursive)) {
-                $error = error_get_last();
-                throw new \Exception('Failed to create directory ' . $this->safe_path($path) . (($error) ? ' Error: ' . $error['message'] : ' Error: unknown'));
+
+                // check if directory is already created by a concurent process, ignore error
+                if (!file_exists($path)) {
+                    $error = error_get_last();
+                    throw new \Exception('Failed to create directory ' . $this->safe_path($path) . (($error) ? ' Error: ' . $error['message'] : ' Error: unknown'));
+                }
             }
 
             // set permissions
             @chmod($path, $mode);
+        } elseif (!is_dir($path) && file_exists($path)) {
+            throw new \Exception('Failed to create directory ' . $this->safe_path($path) . ' Error: path exists as a file (not a directory)');
         }
 
         return true;
@@ -124,7 +131,7 @@ class File extends Controller implements Controller_Interface
      */
     final public function rmdir($path, $contentsOnly = false, $deleteNonEmpty = true)
     {
-        if (!is_dir($path)) {
+        if (!file_exists($path)) {
             return false;
         }
 
@@ -153,7 +160,9 @@ class File extends Controller implements Controller_Interface
         }
 
         // delete directory
-        return @rmdir($path);
+        @rmdir($path);
+
+        return (!file_exists($path));
     }
 
     /**

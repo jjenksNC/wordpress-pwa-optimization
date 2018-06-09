@@ -30,7 +30,8 @@ class Error extends Controller implements Controller_Interface
         return parent::construct($Core, array(
             // controllers to bind
             'file',
-            'admin'
+            'admin',
+            'env'
         ));
     }
 
@@ -59,7 +60,7 @@ class Error extends Controller implements Controller_Interface
             $this->admin->add_notice($error->getMessage(), $category);
         }
 
-        if (defined('O10N_DEBUG') && O10N_DEBUG && $category !== 'client') {
+        if ($this->env->is_debug() && $category !== 'client') {
             $client = Core::get('client');
             if ($client) {
                 $client->print_exception($category, $error->getMessage());
