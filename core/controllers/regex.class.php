@@ -62,9 +62,7 @@ class Regex extends Controller implements Controller_Interface
             } elseif ($char === ' ' || $char === "\n") {
                 $regex = '#('.$param_quote.'\s*=\s*["|\'])([^"|\']+)(["|\'])#Usmi';
             } else {
-                $attributes_str .= '>';
-                $regex = '#('.$param_quote.'\s*=)([^\s>]+)(\s|>)#Usmi';
-                $last_is_quote = false;
+                $regex = '#('.$param_quote.'\s*=)([^\s>]+)(\s|>|$)#Usmi';
             }
 
             // return param
@@ -75,12 +73,12 @@ class Regex extends Controller implements Controller_Interface
                     return false;
                 }
 
-                return ($out[2]) ? $this->url->translate_protocol($out[2]) : $out[2];
+                return $out[2];
             }
 
             if ($replace === -1) {
                 // replace param in tag
-                $attributes = preg_replace($regex, (($last_is_quote) ? '' : '$3'), $attributes_str);
+                $attributes = preg_replace($regex, '', $attributes_str);
             } else {
                 // replace param in tag
                 $attributes = preg_replace($regex, '$1' . $replace . '$3', $attributes_str);
