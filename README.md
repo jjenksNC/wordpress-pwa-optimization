@@ -83,7 +83,7 @@ A performance flaw of Service Workers is that they initiate Fetch requests that 
 
 ![Background Fetch](https://github.com/o10n-x/wordpress-pwa-optimization/blob/master/docs/images/background-fetch.png)
 
-### Web App Manifest editor
+### Web App Manifest Editor
 
 The plugin provides a Web App `manifest.json` and meta editor to easily optimize the web app configuration.
 
