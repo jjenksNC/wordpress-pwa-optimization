@@ -469,10 +469,14 @@ class Pwa extends Controller implements Controller_Interface
     /**
      * Update service worker file
      */
-    final public function update_sw()
+    final public function update_sw($forminput = false)
     {
+
+        // options controller
+        $options = ($forminput) ? $forminput : $this->options;
+
         // PWA disabled, remove service worker
-        if (!$this->options->bool('pwa.enabled')) {
+        if (!$options->bool('pwa.enabled')) {
             $sw_files = array(
                 $this->sw_path . $this->sw_filename,
                 $this->sw_path . $this->sw_worker_filename,
@@ -495,7 +499,7 @@ class Pwa extends Controller implements Controller_Interface
                 $sw_modules = array($this->core->modules('pwa')->dir_path() . 'public/js/sw' . (($debug) ? '.debug.js' : '.js'));
 
                 // add cache digest module
-                if ($this->options->bool('pwa.cache_digest')) {
+                if ($options->bool('pwa.cache_digest')) {
                     $sw_modules[] = $this->core->modules('pwa')->dir_path() . 'public/js/sw-cache-digest' . (($debug) ? '.debug.js' : '.js');
                 }
 
@@ -517,8 +521,8 @@ class Pwa extends Controller implements Controller_Interface
                 $file_hash = md5($source);
                 $source = str_replace('O10N_SW_FILE_HASH', json_encode($file_hash), $header . $source);
 
-                if ($this->options->bool('pwa.importScripts.enabled')) {
-                    $scripts = $this->options->get('pwa.importScripts.scripts');
+                if ($options->bool('pwa.importScripts.enabled')) {
+                    $scripts = $options->get('pwa.importScripts.scripts');
                     if (is_array($scripts) && !empty($scripts)) {
                         $source .= "\n\n/* Import scripts */\nimportScripts(".json_encode(implode(',', $scripts)).");";
                     }

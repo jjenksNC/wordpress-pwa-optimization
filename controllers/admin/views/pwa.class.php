@@ -228,7 +228,7 @@ class AdminViewPwa extends AdminViewBase
                 }
 
                 // update service worker with new config
-                $this->pwa->update_sw();
+                $this->pwa->update_sw($forminput);
 
             break;
             case "manifest":
