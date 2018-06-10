@@ -409,7 +409,7 @@ class Url extends Controller implements Controller_Interface
 
         // include Net_URL2
         // @link http://pear.php.net/package/Net_URL2/
-        if (!class_exists('O10n\Net_URL2')) {
+        if (!class_exists('O10n\Net_URL2', false)) {
             require_once O10N_CORE_PATH . 'lib/Net_URL2.php';
         }
 

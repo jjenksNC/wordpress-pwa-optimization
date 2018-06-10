@@ -192,8 +192,8 @@ class Client extends Controller implements Controller_Interface
      */
     final public function add_html($HTML)
     {
-        // no <head> tag, skip
-        if (stripos($HTML, '<head>') === false && stripos($HTML, '<head ') === false) {
+        // no <head> or <html> tag, skip
+        if (stripos($HTML, '<head>') === false && stripos($HTML, '<head ') === false && stripos($HTML, '<html ') === false) {
             return $HTML;
         }
 

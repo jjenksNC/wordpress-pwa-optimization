@@ -63,7 +63,7 @@ class Proxy extends Controller implements Controller_Interface
         $loadProxyModule = false;
 
         // CSS capture
-        if ($this->options->bool('css.proxy.enabled') && $this->options->bool('css.proxy.capture.enabled')) {
+        if ($this->env->enabled('css') && $this->options->bool('css.proxy.enabled') && $this->options->bool('css.proxy.capture.enabled')) {
 
             // proxy list
             $proxyList = $this->options->get('css.proxy.capture.list');
@@ -131,7 +131,7 @@ class Proxy extends Controller implements Controller_Interface
         }
 
         // Javascript proxy capture
-        if ($this->options->bool('js.proxy.enabled') && $this->options->bool('js.proxy.capture.enabled')) {
+        if ($this->env->enabled('js') && $this->options->bool('js.proxy.enabled') && $this->options->bool('js.proxy.capture.enabled')) {
 
             // proxy list
             $proxyList = $this->options->get('js.proxy.capture.list');

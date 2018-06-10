@@ -154,7 +154,9 @@ class Env extends Controller implements Controller_Interface
 
                 // get module controller
                 $module_ctrl = $this->core->modules($module);
-                if ($module_ctrl && !$module_ctrl->enabled($use_cache)) {
+
+                // module disabled
+                if (!$module_ctrl || !$module_ctrl->enabled($use_cache)) {
                     return false;
                 }
             }
