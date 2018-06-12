@@ -232,6 +232,30 @@
                                         "minimum": 1,
                                         "default": 500
                                     }]
+                                },
+                                "link_replace": {
+                                    "title": "Search/replace configuration",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "search": {
+                                                "type": "string"
+                                            },
+                                            "replace": {
+                                                "type": "string"
+                                            },
+                                            "regex": {
+                                                "title": "Regular expression",
+                                                "type": "boolean"
+                                            }
+                                        },
+                                        "required": [
+                                            "search",
+                                            "replace"
+                                        ],
+                                        "additionalProperties": false
+                                    }
                                 }
                             },
                             "required": ["url"],
@@ -301,6 +325,30 @@
                                         "minimum": 1,
                                         "default": 500
                                     }]
+                                },
+                                "link_replace": {
+                                    "title": "Search/replace configuration",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "search": {
+                                                "type": "string"
+                                            },
+                                            "replace": {
+                                                "type": "string"
+                                            },
+                                            "regex": {
+                                                "title": "Regular expression",
+                                                "type": "boolean"
+                                            }
+                                        },
+                                        "required": [
+                                            "search",
+                                            "replace"
+                                        ],
+                                        "additionalProperties": false
+                                    }
                                 }
                             },
                             "required": ["method", "link_method"],
