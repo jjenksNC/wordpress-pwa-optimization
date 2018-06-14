@@ -40,7 +40,7 @@ final class Exception extends \Exception
         $this->log = $log; // log error
         $this->fatal = $fatal; // error is fatal
         
-        if (!class_exists('O10n\\Core')) {
+        if (!class_exists('O10n\\Core', false)) {
             wp_die(__('Failed to load plugin. Please contact the administrator of this website.', 'o10n'));
         }
 

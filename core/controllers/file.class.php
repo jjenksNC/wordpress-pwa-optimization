@@ -117,7 +117,7 @@ class File extends Controller implements Controller_Interface
                 // mkdir failed
                 // check if directory has been created by a concurrent process
                 
-                // clear stat cache for path (should not be required)
+                // clear stat cache for path
                 clearstatcache(true, $path);
 
                 // double check if directory exists
@@ -129,27 +129,27 @@ class File extends Controller implements Controller_Interface
                 $error = error_get_last();
 
                 // directory exists error
-                // add stack trace and request to report issue on Github
-                // @link https://github.com/o10n-x/wordpress-css-optimization/issues/23
+                // potential file system related bug (how can file_exists return false?)
                 if ($error && $error['message'] === 'mkdir(): File exists') {
 
-                    // convert file path to safe path for public sharing
-                    if (isset($error['file'])) {
-                        $error['file'] = $this->safe_path($error['file']);
-                    }
-                    $error['_path'] = $this->safe_path($path);
-                    $error['_date'] = date('r');
-                    $error['_trace'] = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+                    // try again
+                    if (!@mkdir($path, $mode, $recursive)) {
 
-                    // convert file paths to safe path for public sharing
-                    if ($error['_trace']) {
-                        foreach ($error['_trace'] as $key => $trace) {
-                            if (isset($trace['file'])) {
-                                $error['_trace'][$key]['file'] = $this->safe_path($trace['file']);
-                            }
+                        // still on error
+                        $error = error_get_last();
+
+                        // accept status of error and ignore file_exists
+                        if ($error && $error['message'] === 'mkdir(): File exists') {
+                            return true;
                         }
+
+                        $errorText = (($error) ? 'Error: ' . $error['message'] : 'Error: unknown');
                     }
-                    $errorText = 'Error: directory exists after double-check. Please <strong><a href="https://github.com/o10n-x/wordpress-css-optimization/issues/23" target="_blank">report this issue</a></strong> on Github. (<a href="javascript:void(0);" onclick="jQuery(\'textarea\',jQuery(this).parent()).show();">show error info</a>)<textarea style="margin-top:0.5em;width:100%;height:500px;display:none;">'.json_encode($error, JSON_PRETTY_PRINT).'</textarea>';
+
+                    // set permissions
+                    @chmod($path, $mode);
+
+                    return true;
                 } else {
                     $errorText = (($error) ? 'Error: ' . $error['message'] : 'Error: unknown');
                 }

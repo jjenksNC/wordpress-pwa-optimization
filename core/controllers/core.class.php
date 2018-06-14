@@ -228,7 +228,7 @@ class Core
         }
 
         // already loaded
-        if (class_exists($ns_class_name) || function_exists($ns_class_name)) {
+        if (class_exists($ns_class_name, false) || function_exists($ns_class_name)) {
             return;
         }
 
@@ -261,7 +261,7 @@ class Core
             // failed to load controller
             if (!$class_file) {
                 if (substr_count($class_file, '\\') > 1) {
-                    if (class_exists('O10n\\Exception')) {
+                    if (class_exists('O10n\\Exception', false)) {
                         throw new Exception('Class file does not exist ' . $ns_class_name, 'core');
                     }
                     $this->loading_failed(false, __FILE__, __LINE__);
@@ -277,7 +277,7 @@ class Core
         // loading failed
         if (!class_exists($ns_class_name)) {
             if (substr_count($class_file, '\\') > 1) {
-                if (class_exists('O10n\\Exception')) {
+                if (class_exists('O10n\\Exception', false)) {
                     throw new Exception('Failed to load class ' . $ns_class_name, 'core');
                 }
                 $this->loading_failed(false, __FILE__, __LINE__);

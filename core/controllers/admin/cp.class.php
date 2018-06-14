@@ -258,7 +258,7 @@ jQuery(function($){
             'value' => 'categories',
             'label' => __('Categories')
         );
-        if (class_exists('WooCommerce')) {
+        if (class_exists('WooCommerce', false)) {
             $optgroups[] = array(
                 'value' => 'woocommerce',
                 'label' => __('WooCommerce')

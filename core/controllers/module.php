@@ -145,7 +145,7 @@ final class Module implements Module_Interface
      */
     final public function load_core()
     {
-        if (!class_exists('\O10n\Core')) {
+        if (!class_exists('\O10n\Core', false)) {
 
             // load the optimization core
             require $this->dir_path . 'core/loader.php';

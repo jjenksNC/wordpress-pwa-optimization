@@ -71,7 +71,7 @@ class Uninstall
         global $wpdb;
 
         // get loaded optimization modules
-        $modules = (class_exists('\O10n\Core')) ? Core::get('modules') : false;
+        $modules = (class_exists('\O10n\Core', false)) ? Core::get('modules') : false;
 
         // plugin is last remaining optimization module, delete cache table
         if (!$modules || count($modules) === 0 || (count($modules) === 1 && $modules[0] === $this->module)) {

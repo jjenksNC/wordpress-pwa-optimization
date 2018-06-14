@@ -15,7 +15,7 @@ if (! defined('WP_UNINSTALL_PLUGIN')) {
 $plugin_path = dirname(__FILE__);
 
 // load uninstall controller
-if (!class_exists('\O10n\Uninstall')) {
+if (!class_exists('\O10n\Uninstall', false)) {
     require $plugin_path . '/core/controllers/uninstall.class.php';
 }
 

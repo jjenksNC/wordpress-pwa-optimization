@@ -24,6 +24,8 @@ class Client extends Controller implements Controller_Interface
     private $loaded_modules = array(); // modules to load
     private $loaded_config = array(); // client config
 
+    private $client_printed = false; // client script added the header flag
+
     // module key refereces
     private $modules = array(
         'localstorage',
@@ -174,7 +176,7 @@ class Client extends Controller implements Controller_Interface
             print implode('', $this->at['footer']);
         }
 
-        if (!empty($this->loaded_modules)) {
+        if ($this->client_printed) {
             print '<script data-o10n>o10n.f();</script>';
         }
 
@@ -319,6 +321,8 @@ class Client extends Controller implements Controller_Interface
                 // add client inline
                 $client_html .= '<script data-o10n=\''.str_replace('\'', '&#39;', $client_config).'\'>' . $client_script . '</script>';
             }
+
+            $this->client_printed = true;
         }
 
         // print after client position
