@@ -42,12 +42,12 @@
                         "minLenght": 1
                     }, {
                         "title": "Single reporting endpoint",
-                        "$ref": "headers.json#/definitions/reportToEndpoint"
+                        "$ref": "headers.json#/definitions/reportToGroup"
                     }, {
                         "title": "Reporting endpoints",
                         "type": "array",
                         "items": {
-                            "$ref": "headers.json#/definitions/reportToEndpoint"
+                            "$ref": "headers.json#/definitions/reportToGroup"
                         },
                         "uniqueItems": true
                     }]
@@ -150,12 +150,12 @@
                         "minLenght": 1
                     }, {
                         "title": "Single reporting endpoint",
-                        "$ref": "headers.json#/definitions/reportToEndpoint"
+                        "$ref": "headers.json#/definitions/reportToGroup"
                     }, {
                         "title": "Reporting endpoints",
                         "type": "array",
                         "items": {
-                            "$ref": "headers.json#/definitions/reportToEndpoint"
+                            "$ref": "headers.json#/definitions/reportToGroup"
                         },
                         "uniqueItems": true
                     }]
