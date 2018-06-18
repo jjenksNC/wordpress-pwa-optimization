@@ -15,7 +15,7 @@
             "type": "boolean",
             "default": false
         },
-        "reportUri": {
+        "report-uri": {
             "title": "Report URI",
             "oneOf": [{
                 "type": "string",
