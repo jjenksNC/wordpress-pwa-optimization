@@ -36,9 +36,21 @@
                     "default": false
                 },
                 "group": {
-                    "title": "Reporting API group name",
-                    "type": "string",
-                    "minLenght": 1
+                    "oneOf": [{
+                        "title": "Reporting API group name",
+                        "type": "string",
+                        "minLenght": 1
+                    }, {
+                        "title": "Single reporting endpoint",
+                        "$ref": "headers.json#/definitions/reportToEndpoint"
+                    }, {
+                        "title": "Reporting endpoints",
+                        "type": "array",
+                        "items": {
+                            "$ref": "headers.json#/definitions/reportToEndpoint"
+                        },
+                        "uniqueItems": true
+                    }]
                 }
             },
             "additionalProperties": false
@@ -132,9 +144,21 @@
                     }
                 },
                 "report-to": {
-                    "type": "string",
-                    "format": "uri",
-                    "minLength": 1
+                    "oneOf": [{
+                        "title": "Reporting API group name",
+                        "type": "string",
+                        "minLenght": 1
+                    }, {
+                        "title": "Single reporting endpoint",
+                        "$ref": "headers.json#/definitions/reportToEndpoint"
+                    }, {
+                        "title": "Reporting endpoints",
+                        "type": "array",
+                        "items": {
+                            "$ref": "headers.json#/definitions/reportToEndpoint"
+                        },
+                        "uniqueItems": true
+                    }]
                 },
                 "report-uri": {
                     "type": "string",

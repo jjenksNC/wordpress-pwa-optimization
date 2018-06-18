@@ -270,33 +270,7 @@
                     "title": "Reporting endpoints",
                     "type": "array",
                     "items": {
-                        "title": "Report-To endpoint JSON",
-                        "type": "object",
-                        "properties": {
-                            "url": {
-                                "type": "string",
-                                "format": "uri",
-                                "minLength": 1
-                            },
-                            "group": {
-                                "type": "string",
-                                "minLength": 1,
-                                "default": "default"
-                            },
-                            "includeSubdomains": {
-                                "title": "Enable includeSubdomains flag",
-                                "type": "boolean",
-                                "default": false
-                            },
-                            "max-age": {
-                                "title": "Endpoint life time",
-                                "type": "number",
-                                "minimum": 0,
-                                "default": 86400
-                            }
-                        },
-                        "required": ["url"],
-                        "additionalProperties": false
+                        "$ref": "headers.json#/definitions/reportToEndpoint"
                     },
                     "uniqueItems": true
                 }
@@ -471,5 +445,37 @@
             "additionalProperties": false
         }
     },
-    "additionalProperties": false
+    "additionalProperties": false,
+
+    "definitions": {
+        "reportToEndpoint": {
+            "title": "Report-To endpoint JSON",
+            "type": "object",
+            "properties": {
+                "url": {
+                    "type": "string",
+                    "format": "uri",
+                    "minLength": 1
+                },
+                "group": {
+                    "type": "string",
+                    "minLength": 1,
+                    "default": "default"
+                },
+                "includeSubdomains": {
+                    "title": "Enable includeSubdomains flag",
+                    "type": "boolean",
+                    "default": false
+                },
+                "max-age": {
+                    "title": "Endpoint life time",
+                    "type": "number",
+                    "minimum": 0,
+                    "default": 86400
+                }
+            },
+            "required": ["url"],
+            "additionalProperties": false
+        }
+    }
 }
