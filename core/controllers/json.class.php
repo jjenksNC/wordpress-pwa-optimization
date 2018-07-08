@@ -165,4 +165,42 @@ class Json extends Controller implements Controller_Interface
 
         return $result;
     }
+
+    /**
+     * To dot notation array
+     *
+     * @todo improve
+     * @param string $json JSON string to convert.
+     */
+    final public function to_dot($json)
+    {
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveArrayIterator($json),
+            \RecursiveIteratorIterator::SELF_FIRST
+        );
+        $path = [];
+        $flatArray = [];
+
+        $arrayVal = false;
+        foreach ($iterator as $key => $value) {
+            $path[$iterator->getDepth()] = $key;
+
+            $dotpath = implode('.', array_slice($path, 0, $iterator->getDepth() + 1));
+            if ($arrayVal && strpos($dotpath, $arrayVal) === 0) {
+                continue 1;
+            }
+
+            if (!is_array($value) || empty($value) || array_keys($value)[0] === 0) {
+                if (is_array($value) && (empty($value) || array_keys($value)[0] === 0)) {
+                    $arrayVal = $dotpath;
+                } else {
+                    $arrayVal = false;
+                }
+
+                $flatArray[$dotpath] = $value;
+            }
+        }
+
+        return $flatArray;
+    }
 }

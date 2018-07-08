@@ -101,9 +101,41 @@ class Options extends Controller implements Controller_Interface
      *
      * @param array $options Options to add
      */
-    final public function set($options)
+    final public function set($key, $value = null)
     {
-        foreach ($options as $key => $value) {
+        $json = array();
+
+        // string key
+        if (is_string($key)) {
+            
+            // sanitize potential JSON
+            $key = trim($key);
+
+            // JSON string input
+            if (is_null($value) && substr($key, 0, 1) === '{') {
+                try {
+                    $json = $this->json->parse($key, true);
+                    $json = $this->json->to_dot($json);
+                } catch (\Exception $e) {
+                    throw new Exception('Invalid JSON: ' . $e->getMessage(), 'settings');
+                }
+            } else {
+                $json[$key] = $value;
+            }
+        } elseif (is_array($key)) {
+
+            // multi-dimensional array (decoded JSON)
+            if ($value === true) {
+                $json = $this->json->to_dot($key);
+            } else { // JSON path => value
+                foreach ($key as $_key => $_value) {
+                    $json[$_key] = $_value;
+                }
+            }
+        }
+
+        // store data
+        foreach ($json as $key => $value) {
             $this->data[$key] = $value;
         }
     }
