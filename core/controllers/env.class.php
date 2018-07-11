@@ -240,19 +240,23 @@ class Env extends Controller implements Controller_Interface
         if ($modules) {
             if (is_string($modules)) {
                 $modules = array($modules);
-                foreach ($modules as $module) {
+            }
+            foreach ($modules as $module) {
 
                     // get module controller
-                    $module_ctrl = $this->core->modules($module);
-                    if ($module_ctrl) {
-                        $module_ctrl->disable($state);
-                    }
+                $module_ctrl = $this->core->modules($module);
+                if ($module_ctrl) {
+                    $module_ctrl->disable($state);
                 }
             }
 
-            return;
+            // update enabled cache
+            return $this->enabled($modules, false);
         }
 
         $this->disabled = $state;
+
+        // update enabled cache
+        return $this->enabled(false, false);
     }
 }
