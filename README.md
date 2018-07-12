@@ -101,11 +101,17 @@ The WPO optimization plugins provide in all essential tools that enable to achie
 
 The WPO optimization plugins are designed to work together with single plugin performance. The plugins provide the latest optimization technologies and many unique innovations.
 
-### JSON shema configuration
+### JSON configuration
 
-The WPO optimization plugins are based on JSON schema based configuration that enables full control of the optimization using JSON. This provides several great advantages for website performance optimization.
+100% of the WPO plugin settings are controlled by JSON. This means that you could use the plugins without ever using the WordPress admin forms.
 
-Read more about [JSON schemas](https://github.com/o10n-x/wordpress-o10n-core/tree/master/schemas).
+The JSON is verified using JSON schema's. More info about [JSON schemas](https://github.com/o10n-x/wordpress-o10n-core/tree/master/schemas).
+
+### Local editing of optimization settings
+
+A recently added [Stealth Optimization Config Proxy](https://github.com/o10n-x/wordpress-http2-optimization/releases/tag/0.0.55) concept makes it possible to edit the plugin settings using physical `.json` files from a local editor (with auto upload) making it efficient for fine tuning optimization settings. An update would cost a second compared to using + saving a WordPress admin panel.
+
+https://github.com/o10n-x/wordpress-http2-optimization/releases/tag/0.0.55
 
 ## Google PageSpeed vs Google Lighthouse Scores
 
