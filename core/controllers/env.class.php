@@ -250,13 +250,10 @@ class Env extends Controller implements Controller_Interface
                 }
             }
 
-            // update enabled cache
-            return $this->enabled($modules, false);
+            return;
         }
 
         $this->disabled = $state;
-
-        // update enabled cache
-        return $this->enabled(false, false);
+        $this->enabled = ($state) ? false : true;
     }
 }

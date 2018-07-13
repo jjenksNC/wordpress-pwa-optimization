@@ -269,6 +269,7 @@ final class Module implements Module_Interface
     final public function disable($state)
     {
         $this->disabled = ($state) ? true : false;
+        $this->enabled = ($state) ? false : true;
     }
 
     /**
