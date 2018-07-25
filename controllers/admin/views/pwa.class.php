@@ -273,6 +273,7 @@ class AdminViewPwa extends AdminViewBase
                         try {
                             $this->file->put_contents($manifest_file, $manifest_json);
                         } catch (\Exception $err) {
+                            $forminput->error('manifest.json', $err->getMessage());
                         }
                     
                         // verify contents

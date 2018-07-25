@@ -64,6 +64,9 @@ class Pwa extends Controller implements Controller_Interface
      */
     protected function setup()
     {
+        // path to manifest.json
+        $this->manifest_file = apply_filters('o10n_manifest_file', trailingslashit(ABSPATH) . 'manifest.json');
+
         // disabled
         if (!$this->env->enabled('pwa')) {
             return;
@@ -85,9 +88,6 @@ class Pwa extends Controller implements Controller_Interface
 
         // add module definitions
         $this->client->add_module_definitions($this->client_modules, $this->client_module_dependencies);
-
-        // path to manifest.json
-        $this->manifest_file = apply_filters('o10n_manifest_file', trailingslashit(ABSPATH) . 'manifest.json');
 
         $debug = defined('O10N_DEBUG') && O10N_DEBUG;
 
